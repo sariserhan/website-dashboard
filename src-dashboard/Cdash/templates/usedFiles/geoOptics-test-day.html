@@ -1,0 +1,2494 @@
+<!doctype html>
+<html lang="en">
+{% load cms_tags sekizai_tags %}
+{% load staticfiles %}
+    <head>
+
+      <!--Leaflet dependencies  -->
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
+      <!-- end Leaflet css dependencies -->
+
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+      <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}">
+      <link rel="stylesheet" type="text/css" href="{% static 'css/cosmic-website.css'  %}">
+      {% render_block "css" %}  
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <title>COSMIC-2 Dashboard UCAR</title>
+        <!--[if lte IE 8]>
+            <script src="{% static 'js/excanvas.js' %}"></script>
+        <![endif]-->
+    </head>
+        <nav class="navbar navbar-light navbar-expand-lg fixed-top text-center" style="background-color: #e3f2fd;">
+        <div class="row mx-auto">        
+         <a class="navbar-brand" href="#">
+        <img src="{% static 'images/cmslogo.png' %}"  alt="cosmic-logo">
+         </a>
+         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+     <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Dashboard: GeoOptics<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            COSMIC-2
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+           <!-- <li><a class="dropdown-item" href="/dash/leo-dev-ml1/day">Yesterday - leo-dev-ml1</a></li>
+            <div class="dropdown-divider"></div>
+            <li><a class="dropdown-item" href="/dash/leo-dev-ml1/week">Past Week - leo-dev-ml1</a></li> 
+            <div class="dropdown-divider"></div> -->
+           <li><a class="dropdown-item" href="/cosmic-2/stage/day">Yesterday - leo-a-ml</a></li>
+            <div class="dropdown-divider"></div>
+            <li><a class="dropdown-item" href="/cosmic-2/stage/week">Past Week - leo-a-ml</a></li>   
+       </ul>
+        </li>
+         <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="otherDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Other Missions
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="otherDropdown">
+            <li><a class="dropdown-item" href="/kompsat/day">Yesterday - Kompsat 5</a></li>
+            <div class="dropdown-divider"></div>
+            <li><a class="dropdown-item" href="/kompsat/week">Past Week - Kompsat 5</a></li>
+            <div class="dropdown-divider"></div>
+           <li><a class="dropdown-item" href="/paz/day">Yesterday - Paz</a></li>
+            <div class="dropdown-divider"></div>
+            <li><a class="dropdown-item" href="/paz/week">Past Week - Paz</a></li>
+            <div class="dropdown-divider"></div>
+            <li><a class="dropdown-item text-white active" href="#">Yesterday - GeoOptics</a></li>
+            <div class="dropdown-divider"></div>
+            <li><a class="dropdown-item" href="/geoopt/week">Past Week - GeoOptics</a></li>
+         </ul>
+       </li>
+      </ul>
+     </div>
+       </div> 
+       </nav> 
+
+     <body style="padding-top:75px;">
+       <div class="card p-4">
+         <h5 class="card-header bg-light text-center">Leaflet Map | GeoOptics Good Occultation Readings | leo-a-ml | Past 24 Hours</h5>
+       </div>
+       <div class="row">
+         <div class="col-xl-12">
+            <!-- <div class="card p-4">
+             <h5 class="card-header bg-light text-center">Leaflet Map Here</h5> -->
+      
+    
+             <!-- Leaflet Map Div here  -->             
+               <div class="container-fluid" style="height:750px;">
+                 <div id="mapid"></div>
+               </div>
+               <!-- End Leaflet Display -->
+
+              <h5 class="card-footer bg-light text-center" id="timerange"></h5>
+           </div>
+        <!-- </div> -->
+       </div>
+         <div class="row justify-content-center">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">GeoOptics Occultation Counts By FM</h5>
+              <canvas id="occChart"></canvas>
+             <p class="card-footer bg-light text-right"></p>
+         </div>
+        </div>
+       <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">GeoOptics Occultation Counts Total</h5>
+             <canvas id="occBreakDownByFM"></canvas>
+             <p class="card-footer bg-light text-right"></p>
+         <!--    <p class="card-footer bg-light text-right"></p> --> 
+         </div>
+       </div>
+      </div>
+     </div>
+        <div class="row">
+         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+          <div class="card p-4">
+           <h5 class="card-header bg-light text-center">SNR L1 All</h5>
+           <canvas id="snrL1All"></canvas>
+          <ul class="list-group center">
+           <li class="list-group-item text-center" id="snrL1StatsAll"></li>
+         </ul>
+         </div>
+     </div>        
+         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+         <div class="card p-4">
+          <h5 class="card-header bg-light text-center">SNR L2 All</h5>
+            <canvas id="snrL2All"></canvas>
+            <ul class="list-group center">
+           <li class="list-group-item text-center" id="snrL2StatsAll"></li>
+         </ul> 
+         </div>
+       </div>
+    </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">STDV All</h5>
+            <canvas id="stdvAll"></canvas>
+            <ul class="list-group center">
+           <li class="list-group-item text-center" id="stdvStatsAll"></li>
+         </ul>
+         </div>
+        </div> 
+         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6"> 
+          <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Model Comp Bending Angle All</h5>
+            <canvas id="modelcompBAAll"></canvas>
+            <ul class="list-group center">
+             <li class="list-group-item text-center" id="modelCBAStatsAll"></li>
+           </ul>
+         </div>
+       </div>
+      </div>
+
+        <!-- Placing Latency Plots Here  
+     <div class="container text-center">
+      <button class="btn btn-outline-primary m-4" id="latencybutton">Latency: All Ground Stations</button>
+   </div>
+      <div class="border border-primary rounded" id="latencytoggle1" style="display: none;">
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Latency Occultation to Bufr File All Stations</h5>
+            <canvas id="latencyOccToBufrAll"></canvas>
+          <ul class="list-group center">
+          <li class="list-group-item text-center" id="latencyOtoBAllTable"></li>
+         </ul>
+         </div>
+        </div>
+         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+          <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Latency Occultation to Aos - All Stations</h5>
+            <canvas id="latencyOccToAosAll"></canvas>
+             <ul class="list-group center">
+          <li class="list-group-item text-center" id="latencyOtoAAllTable"></li>
+         </ul>
+         </div>
+       </div>
+      </div>
+       <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Latency Aos to DPC - All Stations</h5>
+            <canvas id="latencyAosToDPCAll"></canvas>
+             <ul class="list-group center">
+          <li class="list-group-item text-center" id="latencyAtoDAllTable"></li>
+         </ul>
+         </div>
+       </div>
+          <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Latency DPC Arrival to Bufr File - All Stations</h5>
+            <canvas id="latencyDPCToBufrAll"></canvas>
+             <ul class="list-group center">
+          <li class="list-group-item text-center" id="latencyDtoBAllTable"></li>
+         </ul>  
+       </div>
+      </div>
+     </div>
+    </div>   -->
+
+    <div class="container text-center">
+      <button class="btn btn-outline-primary m-4" id="thebutton">Model Comparison: Refractivity and Temperature All</button>
+   </div>
+      <div class="border border-primary rounded" id="modelcomptoggle1" style="display: none;">
+       <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6"> 
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Model Comp Refractivity All</h5>
+            <canvas id="modelcompRefAll"></canvas>
+            <ul class="list-group center">
+             <li class="list-group-item text-center" id="modelRefStatsAll"></li>
+           </ul> 
+        </div>
+       </div>
+          <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6"> 
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Model Comp Temp All</h5>
+            <canvas id="modelcompTempAll"></canvas>
+            <ul class="list-group center">
+             <li class="list-group-item text-center" id="modelTempStatsAll"></li>
+           </ul>
+         </div>
+      </div> 
+     </div>
+   </div>
+  
+    <div class="container text-center">
+      <button class="btn btn-outline-primary m-4" id="snrbyfmbutton">SNR by Individual FMs</button>
+   </div>
+      <div class="border border-primary rounded" id="snrbyfmtoggle1" style="display: none;">
+       <div class="row">
+         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+          <div class="card p-4">
+           <h5 class="card-header bg-light text-center">SNR L1 FM 1</h5>
+           <canvas id="snrL1FM1"></canvas>
+          <ul class="list-group center">
+           <li class="list-group-item text-center" id="snrL1StatsFM1"></li>
+         </ul>
+      </div>
+    </div> 
+         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+         <div class="card p-4">
+          <h5 class="card-header bg-light text-center">SNR L1 FM 3</h5>
+            <canvas id="snrL1FM3"></canvas>
+           <ul class="list-group center">
+           <li class="list-group-item text-center" id="snrL1StatsFM3"></li>
+         </ul>
+         </div>
+       </div>
+    </div>
+ <!--    <div class="row justify-content-center">
+         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+          <div class="card p-4">
+           <h5 class="card-header bg-light text-center">SNR L1 FM 4</h5>
+           <canvas id="snrL1FM4"></canvas>
+          <ul class="list-group center">
+           <li class="list-group-item text-center" id="snrL1StatsFM4"></li>
+         </ul>
+      </div>
+     </div>
+    </div> -->
+     <div class="row"> 
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">SNR L2 FM 1</h5>
+            <canvas id="snrL2FM1"></canvas>
+           <ul class="list-group center">
+           <li class="list-group-item text-center" id="snrL2StatsFM1"></li>
+         </ul>
+         </div>
+        </div>
+     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+          <div class="card p-4">
+           <h5 class="card-header bg-light text-center">SNR L2 FM 3</h5>
+            <canvas id="snrL2FM3"></canvas>
+         <ul class="list-group center">
+           <li class="list-group-item text-center" id="snrL2StatsFM3"></li>
+         </ul>
+         </div>
+       </div>
+     </div>
+  <!--   <div class="row justify-content-center">
+         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+          <div class="card p-4">
+           <h5 class="card-header bg-light text-center">SNR L2 FM 4</h5>
+           <canvas id="snrL2FM4"></canvas>
+          <ul class="list-group center">
+           <li class="list-group-item text-center" id="snrL2StatsFM4"></li>
+         </ul>
+      </div>
+     </div>
+    </div> -->
+    </div>
+
+     <div class="container text-center">
+      <button class="btn btn-outline-primary m-4" id="stdvbutton">STDV by Individual FMs</button>
+   </div>
+      <div class="border border-primary rounded" id="stdvtoggle1" style="display: none;">
+        <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">STDV FM 1</h5>
+            <canvas id="stdvFM1"></canvas>
+            <ul class="list-group center">
+             <li class="list-group-item text-center" id="stdvStatsFM1"></li>
+           </ul>
+         </div>
+        </div>
+       <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+          <div class="card p-4">
+           <h5 class="card-header bg-light text-center">STDV FM 3</h5>
+            <canvas id="stdvFM3"></canvas>
+           <ul class="list-group center">
+           <li class="list-group-item text-center" id="stdvStatsFM3"></li>
+         </ul>
+        </div>
+       </div>
+      </div>
+  <!--  <div class="row justify-content-center">
+         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+          <div class="card p-4">
+           <h5 class="card-header bg-light text-center">STDV FM 4</h5>
+           <canvas id="stdvFM4"></canvas>
+          <ul class="list-group center">
+           <li class="list-group-item text-center" id="stdvStatsFM4"></li>
+         </ul>
+      </div>
+     </div>
+    </div> --> 
+     </div>
+    
+      <div class="container text-center">
+      <button class="btn btn-outline-primary m-4" id="modelcompbabutton">Model Comparison: Bending Angle by Individual FMs</button>
+   </div>
+      <div class="border border-primary rounded" id="modelcompbatoggle1" style="display: none;">
+       <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Model Comp Bending Angle FM 1</h5>
+            <canvas id="modelcompBAFM1"></canvas>
+            <ul class="list-group center">
+             <li class="list-group-item text-center" id="modelBAStatsFM1"></li>
+           </ul>
+        </div>
+       </div>
+      <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Model Comp Bending Angle FM 3</h5>
+            <canvas id="modelcompBAFM3"></canvas>
+            <ul class="list-group center">
+             <li class="list-group-item text-center" id="modelBAStatsFM3"></li>
+           </ul>
+        </div>
+       </div>
+     </div>
+  <!-- <div class="row justify-content-center">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Model Comp Bending Angle FM 4</h5>
+            <canvas id="modelcompBAFM4"></canvas>
+            <ul class="list-group center">
+             <li class="list-group-item text-center" id="modelBAStatsFM4"></li>
+           </ul>
+        </div>
+       </div>
+      </div> -->
+    </div>
+     <div class="container text-center">
+      <button class="btn btn-outline-primary m-4" id="modelcomptempbutton">Model Comparison: Temperature by Individual FMs</button>
+   </div>
+      <div class="border border-primary rounded" id="modelcomptemptoggle1" style="display: none;">
+     <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Model Comp Temperature FM 1</h5>
+               <canvas id="modelcompTempFM1"></canvas>
+               <ul class="list-group center">
+             <li class="list-group-item text-center" id="modelTempStatsFM1"></li>
+           </ul>
+          </div>
+       </div>
+      <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Model Comp Temperature FM 3</h5>
+              <canvas id="modelcompTempFM3"></canvas>
+              <ul class="list-group center">
+             <li class="list-group-item text-center" id="modelTempStatsFM3"></li>
+           </ul>
+         </div>
+      </div>
+     </div>
+  <!--  <div class="row justify-content-center">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Model Comp Temperature FM 4</h5>
+            <canvas id="modelcompTempFM4"></canvas>
+            <ul class="list-group center">
+             <li class="list-group-item text-center" id="modelTempStatsFM4"></li>
+           </ul>
+        </div>
+       </div>
+      </div> -->
+    </div>
+     <div class="container text-center">
+      <button class="btn btn-outline-primary m-4" id="modelcomprefbutton">Model Comparison: Refractivity by Individual FMs</button>
+   </div>
+      <div class="border border-primary rounded" id="modelcompreftoggle1" style="display: none;">
+       <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Model Comp Refractivity FM 1</h5>
+            <canvas id="modelcompRefFM1"></canvas>
+            <ul class="list-group center">
+             <li class="list-group-item text-center" id="modelRefStatsFM1"></li>
+           </ul>
+        </div>
+       </div>
+      <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Model Comp Refractivity FM 3</h5>
+            <canvas id="modelcompRefFM3"></canvas>
+           <ul class="list-group center">
+             <li class="list-group-item text-center" id="modelRefStatsFM3"></li>
+           </ul>
+        </div>
+       </div>
+     </div>
+  <!--  <div class="row justify-content-center">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Model Comp Refractivity FM 4</h5>
+            <canvas id="modelcompRefFM4"></canvas>
+            <ul class="list-group center">
+             <li class="list-group-item text-center" id="modelRefStatsFM4"></li>
+           </ul>
+        </div>
+       </div>
+      </div> -->
+    </div>  
+  {% addtoblock "js" %}
+         <!--   <script type="text/javascript" src="{% static 'static_jquery/js/jquery.js' %}" /> -->
+         <!--  <script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script> -->
+          
+         <!-- Leaflet JS dependencies -->
+          <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js" integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==" crossorigin=""></script>
+          <script type="text/javascript" src="{% static 'js/mousePosition.js' %}"></script>      
+          <script>
+            function fetchHeader(url, wch) {
+              try {
+                var req=new XMLHttpRequest();
+                req.open("HEAD", url, false);
+                req.send(null);
+                if(req.status== 200){
+                  return req.getResponseHeader(wch);
+                }
+                else return false;
+                } catch(er) {
+                  return er.message;
+                }
+             }
+          </script>
+        <!-- END Leaflet JS Dependencies -->
+
+        <!-- other dependencies -->
+          <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment@2.24.0"></script>
+          <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+          <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+          <script src="/data/{{ filename  }}.js"></script>        
+          <script src="/data/k5/yesterday/stageOccSummaryDayGeo.js"></script>
+          <script src="/data/k5/yesterday/stageModelCompDayGeo.js"></script> 
+        <!--  <script src="/data/k5/yesterday/Stage-LatencyStatsDay.js"></script> -->
+         <!-- <script src="/data/leo-stage-ml1/leo-stage-ml1-LatencyStatsDay.js"></script> -->
+         <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chartjs-plugin-crosshair@1.1.4"></script> -->
+      {% endaddtoblock %}
+        </div>
+ {% addtoblock "js" %}
+        <script type="text/javascript">
+        var values_j = []; 
+        var labels_j = [];
+        var colors = [
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 99, 132, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 99, 132, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ];
+         var background_colors= [
+          'rgba(54, 162, 235, 0.5)',
+          'rgba(255, 99, 132, 0.5)',
+          'rgba(75, 192, 192, 0.5)',
+          'rgba(255, 206, 86, 0.5)',
+          'rgba(153, 102, 255, 0.5)',
+          'rgba(255, 159, 64, 0.5)',
+          'rgba(54, 162, 235, 0.5)',
+          'rgba(255, 99, 132, 0.5)',
+          'rgba(75, 192, 192, 0.5)',
+          'rgba(255, 206, 86, 0.5)',
+          'rgba(153, 102, 255, 0.5)',
+          'rgba(255, 159, 64, 0.5)'
+        ];
+        var set = occsbyFM ;
+        var occTotal = occCountsAll ;
+        var headerRange = timeRange ;
+        /* --------------------- COSMIC ChartJS Client ------------------------- *
+                           
+                               2019-2020 Written by Adam Sunshine
+          --------------  Data Building Starts Here ------------------------ */
+        // Bar Chart Building for ChartJS
+        function build_bar_chart(bar_data){
+          return_arr = {}; 
+          return_arr['labels'] = bar_data[0][0];
+          //console.log(snrL2Labels);
+          return_arr['gps'] = bar_data[0][1];
+          //include glonass for GeoOptics
+          return_arr['glonass'] = bar_data[1][1];
+          //console.log(return_arr);
+          //console.log(snr2Glonass);
+          return return_arr;
+         }
+        //function for building stats legend below plots 
+        function convertToLegend(html_id, legend_text){
+            document.getElementById(html_id).innerHTML = legend_text;
+            //console.log("added " + legend_text + " to " + html_id + ".\n");
+        }
+        function build_data(occsdata){
+          return_obj = new Object;
+          key_arr = Object.keys(occsdata[0]);    //grab the keys from the first entry, assuming
+          key_arr.forEach(function(t){           // all data entries are consistent in length and order
+          return_obj[t]=[];
+          });                                    //turn the keys into a separate array for data plotting separation
+          occsdata.forEach(function(s){ 
+            let entry = Object.entries(s);       //turn object into iterable list
+            entry.forEach(function(i){
+             return_obj[i[0]].push(i[1]);
+            })
+          });                                      //take each list of data, set key and value dynamically based on entries  
+          //console.log(return_obj);
+          labels_j = return_obj.date;             //set labels as date and remove them from data
+          delete return_obj.date;
+          //console.log(return_obj);
+          var datasets = [];
+          let obj_list = Object.entries(return_obj); // turn new list of objects into valid chart js objects 
+          var c = 0;
+          let obj_list_sorted = obj_list.sort();  
+          obj_list_sorted.forEach(function(r){
+            //console.log(r);
+            var one_display = { label: r[0],
+                                data: r[1],
+                                borderColor:colors[c],
+                                backgroundColor:background_colors[c]
+            };
+            c+=1;
+            datasets.push(one_display);
+          });                                     // use counter for dynamically grabbing color based on color array
+                                                  //  and pushing data from obj_list
+          return datasets;
+        } /* -------------------------- END OF BUILD_DATA ------------------------------------------ *
+
+                                         To Be Continued
+
+          -----------------------------------  UCAR COSMIC ------------------------------------------  */
+        var the_data = build_data(set); //call the function 
+        var occTotalData = build_data(occTotal);
+        var dateLabel = [];
+        function getDate(item){
+          date_item = moment(item);
+          dateLabel.push(date_item);
+        }
+        labels_j.forEach(getDate);
+        //console.log(dateLabel);
+        function buildModelComps(modelcompdata){
+          return_model = {};
+          return_model['Mean'] = [];
+          return_model['plus-STDV'] = [];
+          return_model['minus-STDV'] = [];
+          for(var i = 0; i < modelcompdata.length; i++){
+            var entry = {};
+            entry['y'] = i
+            entry['x'] = modelcompdata[i][0];
+            return_model['Mean'].push(entry);
+            entry = {};
+            entry['y'] = i;
+            entry['x'] = modelcompdata[i][1];
+            return_model['plus-STDV'].push(entry);
+            entry = {};
+            entry['y'] = i;
+            entry['x'] = modelcompdata[i][2];
+            return_model['minus-STDV'].push(entry);
+          }/*
+          modelcompdata.forEach(function(entry){
+            return_model['Mean'].push(entry[0]);
+            return_model['plus-STDV'].push(entry[1]);
+            return_model['minus-STDV'].push(entry[2]);
+          });*/
+          //console.log(return_model);
+          return return_model; 
+       }
+
+       // build Latency Graphs from JSON
+       function buildLatencyPlots(latency_data_var, keys_var){
+         return_latency = [];
+         var c = 0;
+         latency_data_var.forEach(function(item){
+           chartObj = {
+             label: keys_var[c],
+             data: item[1],
+             backgroundColor: background_colors[c], 
+             borderColor: colors[c],
+            }; 
+            c+=1;
+            return_latency.push(chartObj);
+          });
+          console.log(return_latency);
+          return return_latency;
+       };
+       function buildLegendStats(legArr){
+         return ("Average of Mean: 0-10 KM: " + legArr[0].toFixed(3) + " | 10-20 KM: " + legArr[1].toFixed(3) + 
+                 " | 20-30 KM: " + legArr[2].toFixed(3) + " | 30-40 KM: " + legArr[3].toFixed(3) + "<br>" +
+                 "Average of Stdv: 0-10 KM: " + legArr[4].toFixed(3) + " | 10-20 KM: " + legArr[5].toFixed(3) +
+                 " | 20-30 KM: " + legArr[6].toFixed(3) + " | 30-40 KM: " + legArr[7].toFixed(3));
+       };
+        var legendstattest = buildLegendStats(baModelCompAllStats[0]);
+        var legendrefAll = buildLegendStats(refModelCompAllStats[0]);
+        var legendtempAll = buildLegendStats(tmpModelCompAllStats[0]);
+        var modBaStatsFM1 = buildLegendStats(baModelCompFM1Stats[0]);
+        var modRefStatsFM1 = buildLegendStats(refModelCompFM1Stats[0]);
+        var modTempStatsFM1 = buildLegendStats(tmpModelCompFM1Stats[0]);
+        var modBaStatsFM3 = buildLegendStats(baModelCompFM3Stats[0]);
+        var modRefStatsFM3 = buildLegendStats(refModelCompFM3Stats[0]);
+        var modTempStatsFM3 = buildLegendStats(tmpModelCompFM3Stats[0]);
+        //var modBaStatsFM4 = buildLegendStats(baModelCompFM4Stats[0]);
+        //var modRefStatsFM4 = buildLegendStats(refModelCompFM4Stats[0]);
+        //var modTempStatsFM4 = buildLegendStats(tmpModelCompFM4Stats[0]);
+        convertToLegend("timerange", (headerRange + " UTC"));
+        convertToLegend("snrL1StatsAll", (snr_L1_hist_allStats[0] + "<br>" + snr_L1_hist_allStats[1]));
+        convertToLegend("snrL2StatsAll", (snr_L2_hist_allStats[0] + "<br>" + snr_L2_hist_allStats[1]));
+        convertToLegend("stdvStatsAll", (stdv_hist_allStats[0] + "<br>" + stdv_hist_allStats[1]));
+        //convertToLegend("snrL1StatsFM1", (snr_L1_hist_fm1Stats[0]));
+        //convertToLegend("snrL2StatsFM1", (snr_L2_hist_fm1Stats[0]));
+        //convertToLegend("stdvStatsFM1", (stdv_hist_fm1Stats[0]));
+        convertToLegend("snrL1StatsFM1", (snr_L1_hist_fm1Stats[0] + "<br>" + snr_L1_hist_fm1Stats[1]));
+        convertToLegend("snrL2StatsFM1", (snr_L2_hist_fm1Stats[0] + "<br>" + snr_L2_hist_fm1Stats[1]));
+        convertToLegend("stdvStatsFM1", (stdv_hist_fm1Stats[0] + "<br>" + stdv_hist_fm1Stats[1]));
+        convertToLegend("snrL1StatsFM3", (snr_L1_hist_fm3Stats[0] + "<br>" + snr_L1_hist_fm3Stats[1]));
+        convertToLegend("snrL2StatsFM3", (snr_L2_hist_fm3Stats[0] + "<br>" + snr_L2_hist_fm3Stats[1]));
+        convertToLegend("stdvStatsFM3", (stdv_hist_fm3Stats[0] + "<br>" + stdv_hist_fm3Stats[1]));
+        //convertToLegend("snrL1StatsFM4", (snr_L1_hist_fm4Stats[0] + "<br>" + snr_L1_hist_fm4Stats[1]));
+        //convertToLegend("snrL2StatsFM4", (snr_L2_hist_fm4Stats[0] + "<br>" + snr_L2_hist_fm4Stats[1]));
+        //convertToLegend("stdvStatsFM4", (stdv_hist_fm4Stats[0] + "<br>" + stdv_hist_fm4Stats[1]));
+        stdv_all = build_bar_chart(stdv_hist_all);
+        snrl1_all = build_bar_chart(snr_L1_hist_all);
+        snrl2_all = build_bar_chart(snr_L2_hist_all);
+        stdv_fm1 = build_bar_chart(stdv_hist_fm_1);
+        snrl1_fm1 = build_bar_chart(snr_L1_hist_fm_1);
+        snrl2_fm1 = build_bar_chart(snr_L2_hist_fm_1);
+        stdv_fm3 = build_bar_chart(stdv_hist_fm_3);
+        snrl1_fm3 = build_bar_chart(snr_L1_hist_fm_3);
+        snrl2_fm3 = build_bar_chart(snr_L2_hist_fm_3);
+        //stdv_fm4 = build_bar_chart(stdv_hist_fm_4);
+        //snrl1_fm4 = build_bar_chart(snr_L1_hist_fm_4);
+        //snrl2_fm4 = build_bar_chart(snr_L2_hist_fm_4);
+        //var latencyOccToBufrall =  buildLatencyPlots(latencyOccToBufferAll,latencyKeysAll );
+        //var latencyOccToAosall = buildLatencyPlots(latencyOccToAOSAll, latencyKeysAll); 
+        //var latencyDPCToBufrall = buildLatencyPlots(latencyDPCToBufferAll, latencyKeysAll);
+        //var latencyAosToDPCall = buildLatencyPlots(latencyAosToDPCAll, latencyKeysAll); 
+        //convertToLegend("latencyOtoBAllTable", latencyOccToBufferStatsAll); 
+        //convertToLegend("latencyOtoAAllTable", latencyOccToAOSStatsAll);
+        //convertToLegend("latencyAtoDAllTable", latencyAosToDPCStatsAll); 
+        //convertToLegend("latencyDtoBAllTable", latencyDPCToBufferStatsAll);
+        var BA_Model_Data = buildModelComps(baModelCompAll);
+        var REF_Model_Data = buildModelComps(refModelCompAll);
+        var TMP_Model_Data = buildModelComps(tmpModelCompAll);
+        var BA_Model_Data1 = buildModelComps(baModelCompFM1);
+        var REF_Model_Data1 = buildModelComps(refModelCompFM1);
+        var TMP_Model_Data1 = buildModelComps(tmpModelCompFM1); 
+        var BA_Model_Data3 = buildModelComps(baModelCompFM3);
+        var REF_Model_Data3 = buildModelComps(refModelCompFM3);
+        var TMP_Model_Data3 = buildModelComps(tmpModelCompFM3);
+        //var BA_Model_Data4 = buildModelComps(baModelCompFM4);
+        //var REF_Model_Data4 = buildModelComps(refModelCompFM4);
+        //var TMP_Model_Data4 = buildModelComps(tmpModelCompFM4);
+        convertToLegend("modelCBAStatsAll", legendstattest);
+        convertToLegend("modelRefStatsAll", legendrefAll);
+        convertToLegend("modelTempStatsAll", legendtempAll);
+        convertToLegend("modelBAStatsFM1", modBaStatsFM1);
+        convertToLegend("modelRefStatsFM1", modRefStatsFM1);
+        convertToLegend("modelTempStatsFM1",modTempStatsFM1);
+        convertToLegend("modelBAStatsFM3", modBaStatsFM3);
+        convertToLegend("modelRefStatsFM3", modRefStatsFM3);
+        convertToLegend("modelTempStatsFM3",modTempStatsFM3);
+        //convertToLegend("modelBAStatsFM4", modBaStatsFM4);
+        //convertToLegend("modelRefStatsFM4", modRefStatsFM4);
+        //convertToLegend("modelTempStatsFM4",modTempStatsFM4); 
+      </script>
+      <!-- Build Leaflet display  -->
+      <script src="/data/k5/yesterday/geo_json_geooptrt_fm_01_good.js"></script>
+      <script src="/data/k5/yesterday/geo_json_geooptrt_fm_03_good.js"></script>
+      <script src="/data/k5/yesterday/geo_json_geooptrt_fm_04_good.js"></script>
+      <script src="/data/k5/yesterday/stageBuildLeafletDayGeo.js "></script>
+      <script> 
+       $(document).ready(function() {
+          setInterval(function() {
+          //window.location.reload(true);
+          //alert(localStorage.checked)
+          //active = controlLayers.getOverlays();
+          controlLayers.getOverlays();
+          //window.location.reload(true);
+          //alert(controlLayers.getOverlays())
+          }, 10000);
+        });
+        $( "#thebutton" ).click(function() {
+         $( "#modelcomptoggle1" ).toggle("slow");
+       });
+       $( "#latencybutton").click(function() {
+         $("#latencytoggle1").toggle("slow");
+        });
+       $( "#snrbyfmbutton").click(function() {
+         $("#snrbyfmtoggle1").toggle("slow");
+        });
+       $( "#stdvbutton").click(function() {
+         $("#stdvtoggle1").toggle("slow");
+        });
+       $( "#modelcompbabutton").click(function() {
+         $("#modelcompbatoggle1").toggle("slow");
+        });
+       $( "#modelcomptempbutton").click(function() {
+         $("#modelcomptemptoggle1").toggle("slow");
+        });
+       $( "#modelcomprefbutton").click(function() {
+         $("#modelcompreftoggle1").toggle("slow");
+        });
+         window.onload = function(){
+          var ctx = document.getElementById('occChart').getContext('2d');
+          var ctx2 = document.getElementById('stdvAll').getContext('2d');
+          var ctx3 = document.getElementById('snrL1All').getContext('2d');
+          var ctx4 = document.getElementById('snrL2All').getContext('2d');
+          var ctx5 = document.getElementById('occBreakDownByFM').getContext('2d');
+          var ctx8 = document.getElementById('snrL1FM1').getContext('2d');
+          var ctx7 = document.getElementById('snrL2FM1').getContext('2d');
+          var ctx6 = document.getElementById('stdvFM1').getContext('2d');
+          var ctx9 = document.getElementById('snrL1FM3').getContext('2d');
+          var ctx10 = document.getElementById('snrL2FM3').getContext('2d');
+          var ctx11 = document.getElementById('stdvFM3').getContext('2d');
+          //var ctx15 = document.getElementById('snrL1FM4').getContext('2d');
+          //var ctx16 = document.getElementById('snrL2FM4').getContext('2d');
+          //var ctx17 = document.getElementById('stdvFM4').getContext('2d');
+          var ctx24 = document.getElementById('modelcompBAAll').getContext('2d');
+          var ctx25 = document.getElementById('modelcompRefAll').getContext('2d');
+          var ctx26 = document.getElementById('modelcompTempAll').getContext('2d');
+          var ctx27 = document.getElementById('modelcompBAFM1').getContext('2d');
+          var ctx28 = document.getElementById('modelcompRefFM1').getContext('2d');
+          var ctx29 = document.getElementById('modelcompTempFM1').getContext('2d');
+          var ctx30 = document.getElementById('modelcompBAFM3').getContext('2d');
+          var ctx31 = document.getElementById('modelcompRefFM3').getContext('2d');
+          var ctx32 = document.getElementById('modelcompTempFM3').getContext('2d');
+          //var ctx36 = document.getElementById('modelcompBAFM4').getContext('2d');
+          //var ctx37 = document.getElementById('modelcompRefFM4').getContext('2d');
+          //var ctx38 = document.getElementById('modelcompTempFM4').getContext('2d');
+          //var ctx45 = document.getElementById('latencyOccToBufrAll').getContext('2d');
+          //var ctx46 = document.getElementById('latencyOccToAosAll').getContext('2d');
+          //var ctx47 = document.getElementById('latencyAosToDPCAll').getContext('2d');
+          //var ctx48 = document.getElementById('latencyDPCToBufrAll').getContext('2d');
+          var chart = new Chart(ctx, {
+           // The type of chart we want to create
+            type: "bar",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                  labels: dateLabel, 
+                   datasets: the_data
+                },
+                   // Configuration options go here
+                options: {
+                  tooltips: {
+                    mode: 'nearest',
+                    intersect: false
+          },
+          //deleted the crosshairjs options to fix hover - Adam
+                  scales: {
+                    xAxes: [{ 
+                      display: true,
+                      offset: true,
+                      type: 'time',
+                      time: {
+                        unit: 'day'
+                        },
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'Date (MMM DD)'
+               },
+ 
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Occultation Count' 
+                 },
+                     ticks: {
+                       min: 0,
+                       max: 600
+                 }
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }
+          }
+         }); 
+         var chart5 = new Chart(ctx5, {
+           // The type of chart we want to create
+            type: "bar",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                  labels: dateLabel, 
+                  datasets: occTotalData
+                },
+                   // Configuration options go here
+                options: {
+                  
+          //deleted the crosshairjs options to fix hover - Adam
+                  scales: {
+                    xAxes: [{ 
+                      display: true,
+                      offset: true,
+                      type: 'time',
+                      time: {
+                        unit: 'day'
+                        },
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'Date (MMM DD)'
+               },
+ 
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Occultation Count' 
+                 },
+                     ticks: {
+                       min: 0,
+                       max: 1500
+                 }
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }
+          }
+         });
+
+         var chart2 = new Chart(ctx2, {
+           // The type of chart we want to create
+            type: "bar",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                  labels: stdv_all['labels'], 
+                  datasets: [{
+                    label: "GPS",
+                    data: stdv_all['gps'],
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+           }, {
+                    label: "Glonass",
+                    data: stdv_all['glonass'],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)', 
+                  }]
+                },
+                   // Configuration options go here
+                options: {
+                  scales: {
+                    xAxes: [{ 
+                     display: true,
+                      type: 'category',
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'STDV (microrads)'
+               }, ticks: {
+                   min: 0,
+                   max: 4,
+                   stepSize: 0.25, 
+                   display: true
+               } 
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Percent %' 
+                 },
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }          }
+         });
+        var chart3 = new Chart(ctx3, {
+           // The type of chart we want to create
+            type: "bar",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                labels: snrl1_all['labels'],   
+                datasets: [{ 
+                  label: "GPS",
+                  data: snrl1_all['gps'],
+                  borderColor: 'rgba(54, 162, 235, 1)',
+                  backgroundColor: 'rgba(54, 162, 235, 0.5)',
+          },{
+                   label: "Glonass",
+                   data: snrl1_all['glonass'],
+                   borderColor: 'rgba(75, 192, 192, 1)',
+                   backgroundColor: 'rgba(75, 192, 192, 0.5)', 
+                  }]
+                },
+                   // Configuration options go here
+                options: {
+                  scales: {
+                    xAxes: [{ 
+                     display: true,
+                      type: 'category',
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'V/V'
+               }
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Percent %' 
+                 },
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }
+          }
+         });
+        var chart4 = new Chart(ctx4, {
+           // The type of chart we want to create
+            type: "bar",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                  labels:  snrl2_all['labels'],
+                  datasets: [{ 
+                    label: "GPS",
+                    data: snrl2_all['gps'],
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            }, {
+                    label: "Glonass",
+                    data: snrl2_all['glonass'],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)', 
+                  }]
+                },
+                   // Configuration options go here
+                options: {
+                  scales: {
+                    xAxes: [{ 
+                     display: true,
+                      type: 'category',
+                      scaleLabel: {
+                        display: true,
+                        labelString: ' V/V'
+               }
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Percent %' 
+                 },
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }
+          }
+         });
+         var chart6 = new Chart(ctx6, {
+           // The type of chart we want to create
+            type: "bar",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                  labels:  stdv_fm1['labels'],
+                  datasets: [{ 
+                    label: "GPS",
+                    data: stdv_fm1['gps'],
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            }, {
+                    label: "Glonass",
+                    data: stdv_fm1['glonass'],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)', 
+                  }]
+                },
+                   // Configuration options go here
+                options: {
+                  scales: {
+                    xAxes: [{ 
+                     display: true,
+                      type: 'category',
+                      scaleLabel: {
+                        display: true,
+                        labelString: ' V/V'
+               }
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Percent %' 
+                 },
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }          }
+         });
+          var chart7 = new Chart(ctx7, {
+           // The type of chart we want to create
+            type: "bar",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                  labels:  snrl1_fm1['labels'],
+                  datasets: [{ 
+                    label: "GPS",
+                    data: snrl1_fm1['gps'],
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            }, {
+                    label: "Glonass",
+                    data: snrl1_fm1['glonass'],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)', 
+                  }]
+                },
+                   // Configuration options go here
+                options: {
+                  scales: {
+                    xAxes: [{ 
+                     display: true,
+                      type: 'category',
+                      scaleLabel: {
+                        display: true,
+                        labelString: ' V/V'
+               }
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Percent %' 
+                 },
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }          }
+         });
+          var chart8 = new Chart(ctx8, {
+           // The type of chart we want to create
+            type: "bar",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                  labels:  snrl2_fm1['labels'],
+                  datasets: [{ 
+                    label: "GPS",
+                    data: snrl2_fm1['gps'],
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            }, {
+                    label: "Glonass",
+                    data: snrl2_fm1['glonass'],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)', 
+                  }]
+                },
+                   // Configuration options go here
+                options: {
+                  scales: {
+                    xAxes: [{ 
+                     display: true,
+                      type: 'category',
+                      scaleLabel: {
+                        display: true,
+                        labelString: ' V/V'
+               }
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Percent %' 
+                 },
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }          }
+         });
+         var chart9 = new Chart(ctx9, {
+           // The type of chart we want to create
+            type: "bar",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                  labels:  snrl1_fm3['labels'],
+                  datasets: [{ 
+                    label: "GPS",
+                    data: snrl1_fm3['gps'],
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            }, {
+                    label: "Glonass",
+                    data: snrl1_fm3['glonass'],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)', 
+                  }]
+                },
+                   // Configuration options go here
+                options: {
+                  scales: {
+                    xAxes: [{ 
+                     display: true,
+                      type: 'category',
+                      scaleLabel: {
+                        display: true,
+                        labelString: ' V/V'
+               }
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Percent %' 
+                 },
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }
+          }
+         });
+          var chart10 = new Chart(ctx10, {
+           // The type of chart we want to create
+            type: "bar",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                  labels:  snrl2_fm3['labels'],
+                  datasets: [{ 
+                    label: "GPS",
+                    data: snrl2_fm3['gps'],
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            }, {
+                    label: "Glonass",
+                    data: snrl2_fm3['glonass'],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)', 
+                  }]
+                },
+                   // Configuration options go here
+                options: {
+                  scales: {
+                    xAxes: [{ 
+                     display: true,
+                      type: 'category',
+                      scaleLabel: {
+                        display: true,
+                        labelString: ' V/V'
+               }
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Percent %' 
+                 },
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }
+          }
+         });
+          var chart11 = new Chart(ctx11, {
+           // The type of chart we want to create
+            type: "bar",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                  labels:  stdv_fm3['labels'],
+                  datasets: [{ 
+                    label: "GPS",
+                    data: stdv_fm3['gps'],
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            }, {
+                    label: "Glonass",
+                    data: stdv_fm3['glonass'],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)', 
+                  }]
+                },
+                   // Configuration options go here
+                options: {
+                  scales: {
+                    xAxes: [{ 
+                     display: true,
+                      type: 'category',
+                      scaleLabel: {
+                        display: true,
+                        labelString: ' V/V'
+               }
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Percent %' 
+                 },
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }
+          }
+         });  /*
+         var chart15 = new Chart(ctx15, {
+           // The type of chart we want to create
+            type: "bar",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                  labels:  snrl1_fm4['labels'],
+                  datasets: [{ 
+                    label: "GPS",
+                    data: snrl1_fm4['gps'],
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            }, {
+                    label: "Glonass",
+                    data: snrl1_fm4['glonass'],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)', 
+                  }]
+                },
+                   // Configuration options go here
+                options: {
+                  scales: {
+                    xAxes: [{ 
+                     display: true,
+                      type: 'category',
+                      scaleLabel: {
+                        display: true,
+                        labelString: ' V/V'
+               }
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Percent %' 
+                 },
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }          }
+         });
+         var chart16 = new Chart(ctx16, {
+           // The type of chart we want to create
+            type: "bar",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                  labels:  snrl2_fm4['labels'],
+                  datasets: [{ 
+                    label: "GPS",
+                    data: snrl2_fm4['gps'],
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            }, {
+                    label: "Glonass",
+                    data: snrl2_fm4['glonass'],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)', 
+                  }]
+                },
+                   // Configuration options go here
+                options: {
+                  scales: {
+                    xAxes: [{ 
+                     display: true,
+                      type: 'category',
+                      scaleLabel: {
+                        display: true,
+                        labelString: ' V/V'
+               }
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Percent %' 
+                 },
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }
+          }
+         });
+          var chart17 = new Chart(ctx17, {
+           // The type of chart we want to create
+            type: "bar",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                  labels:  stdv_fm4['labels'],
+                  datasets: [{ 
+                    label: "GPS",
+                    data: stdv_fm4['gps'],
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            }, {
+                    label: "Glonass",
+                    data: stdv_fm4['glonass'],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)', 
+                  }]
+                },
+                   // Configuration options go here
+                options: {
+                  scales: {
+                    xAxes: [{ 
+                     display: true,
+                      type: 'category',
+                      scaleLabel: {
+                        display: true,
+                        labelString: ' V/V'
+               }
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Percent %' 
+                 },
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }
+          }
+         }); */
+         var chart24 = new Chart(ctx24, {
+           // The type of chart we want to create
+            type: "line",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                   datasets: [
+                     {
+                       label: '-1 STDV',
+                       data: BA_Model_Data['minus-STDV'],
+                       fill: false,
+                       borderDash: [10,5],
+                       borderColor: 'rgba(75, 192, 192, 1)',
+                       backgroundColor: 'rgba(75, 192, 192, 1)'
+                   },{                    
+                       label: 'Mean',
+                       data: BA_Model_Data['Mean'],
+                       fill: false,
+                       borderColor: 'rgba(54, 162, 235, 1)',
+                       backgroundColor: 'rgba(54, 162, 235, 0.5)'
+                  },{
+                       label: '+1 STDV',
+                       data: BA_Model_Data['plus-STDV'], 
+                       fill: false,
+                       borderDash: [10,5],
+                       borderColor: 'rgba(75, 192, 192, 1)',
+                       backgroundColor: 'rgba(75, 192, 192, 1)'
+                   }]
+               },
+                   // Configuration options go here
+                options: {
+                  tooltips: {
+                    mode: 'nearest',
+                    intersect: false
+          },
+          //deleted the crosshairjs options to fix hover - Adam
+                  scales: {
+                    xAxes: [{ 
+                      display: true,
+                      type: 'linear',
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'Percent (%)'
+               },
+ 
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Height (km)' 
+                 },
+                     ticks: {
+                       min: 0,
+                       max: 40
+                 }
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }
+          }
+         });
+         var chart25 = new Chart(ctx25, {
+           // The type of chart we want to create
+            type: "line",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                   datasets: [
+                     {
+                       label: '-1 STDV',
+                       data: REF_Model_Data['minus-STDV'],
+                       fill: false,
+                       borderDash: [10,5],
+                       borderColor: 'rgba(75, 192, 192, 1)',
+                       backgroundColor: 'rgba(75, 192, 192, 1)'
+                   },{                    
+                       label: 'Mean',
+                       data: REF_Model_Data['Mean'],
+                       fill: false,
+                       borderColor: 'rgba(54, 162, 235, 1)',
+                       backgroundColor: 'rgba(54, 162, 235, 0.5)'
+                  },{
+                       label: '+1 STDV',
+                       data: REF_Model_Data['plus-STDV'], 
+                       fill: false,
+                       borderDash: [10,5],
+                       borderColor: 'rgba(75, 192, 192, 1)',  
+                       backgroundColor: 'rgba(75, 192, 192, 1)'
+                   }]
+               },
+                   // Configuration options go here
+                options: {
+                  tooltips: {
+                    mode: 'nearest',
+                    intersect: false
+          },
+          //deleted the crosshairjs options to fix hover - Adam
+                  scales: {
+                    xAxes: [{ 
+                      display: true,
+                      type: 'linear',
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'Percent %'
+               },
+ 
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Height (km)' 
+                 },
+                     ticks: {
+                       min: 0,
+                       max: 40
+                 }
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }
+          }
+         });
+         var chart26 = new Chart(ctx26, {
+           // The type of chart we want to create
+            type: "line",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                   datasets: [
+                     {
+                       label: '-1 STDV',
+                       data: TMP_Model_Data['minus-STDV'],
+                       fill: false,
+                       borderDash: [10,5],
+                       borderColor: 'rgba(75, 192, 192, 1)',
+                       backgroundColor: 'rgba(75, 192, 192, 1)'
+                   },{                    
+                       label: 'Mean',
+                       data: TMP_Model_Data['Mean'],
+                       fill: false,
+                       borderColor: 'rgba(54, 162, 235, 1)',
+                       backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                  },{
+                       label: '+1 STDV',
+                       data: TMP_Model_Data['plus-STDV'], 
+                       fill: false,
+                       borderDash: [10,5],
+                       borderColor: 'rgba(75, 192, 192, 1)',
+                       backgroundColor: 'rgba(75, 192, 192, 1)'
+                   }]
+               },
+                   // Configuration options go here
+                options: {
+                  tooltips: {
+                    mode: 'nearest',
+                    intersect: false
+          },
+          //deleted the crosshairjs options to fix hover - Adam
+                  scales: {
+                    xAxes: [{ 
+                      display: true,
+                      type: 'linear',
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'Percent (%)'
+               },
+ 
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Height (km)' 
+                 },
+                     ticks: {
+                       min: 0,
+                       max: 50
+                 }
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }
+          }
+         });
+         var chart27 = new Chart(ctx27, {
+           // The type of chart we want to create
+            type: "line",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                   datasets: [
+                     {
+                       label: '-1 STDV',
+                       data: BA_Model_Data1['minus-STDV'],
+                       fill: false,
+                       borderDash: [10,5],
+                       borderColor: 'rgba(75, 192, 192, 1)',
+                       backgroundColor: 'rgba(75, 192, 192, 1)'
+                   },{                    
+                       label: 'Mean',
+                       data: BA_Model_Data1['Mean'],
+                       fill: false,
+                       borderColor: 'rgba(54, 162, 235, 1)',
+                       backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                  },{
+                       label: '+1 STDV',
+                       data: BA_Model_Data1['plus-STDV'], 
+                       fill: false,
+                       borderDash: [10,5],
+                       borderColor: 'rgba(75, 192, 192, 1)',
+                       backgroundColor: 'rgba(75, 192, 192, 1)'
+                   }]
+               },
+                   // Configuration options go here
+                options: {
+                  tooltips: {
+                    mode: 'nearest',
+                    intersect: false
+          },
+          //deleted the crosshairjs options to fix hover - Adam
+                  scales: {
+                    xAxes: [{ 
+                      display: true,
+                      type: 'linear',
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'Percent (%)'
+               },
+ 
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Height (km)' 
+                 },
+                     ticks: {
+                       min: 0,
+                       max: 50
+                 }
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }
+          }
+         });
+         var chart28 = new Chart(ctx28, {
+           // The type of chart we want to create
+            type: "line",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                   datasets: [
+                     {
+                       label: '-1 STDV',
+                       data: REF_Model_Data1['minus-STDV'],
+                       fill: false,
+                       borderDash: [10,5],
+                       borderColor: 'rgba(75, 192, 192, 1)',
+                       backgroundColor: 'rgba(75, 192, 192, 1)'
+                   },{                    
+                       label: 'Mean',
+                       data: REF_Model_Data1['Mean'],
+                       fill: false,
+                       borderColor: 'rgba(54, 162, 235, 1)',
+                       backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                  },{
+                       label: '+1 STDV',
+                       data: REF_Model_Data1['plus-STDV'], 
+                       fill: false,
+                       borderDash: [10,5],
+                       borderColor: 'rgba(75, 192, 192, 1)',
+                       backgroundColor: 'rgba(75, 192, 192, 1)'
+                   }]
+               },
+                   // Configuration options go here
+                options: {
+                  tooltips: {
+                    mode: 'nearest',
+                    intersect: false
+          },
+          //deleted the crosshairjs options to fix hover - Adam
+                  scales: {
+                    xAxes: [{ 
+                      display: true,
+                      type: 'linear',
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'Percent (%)'
+               },
+ 
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Height (km)' 
+                 },
+                     ticks: {
+                       min: 0,
+                       max: 50
+                 }
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }
+          }
+         });
+         var chart29 = new Chart(ctx29, {
+           // The type of chart we want to create
+            type: "line",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                   datasets: [
+                     {
+                       label: '-1 STDV',
+                       data: TMP_Model_Data1['minus-STDV'],
+                       fill: false,
+                       borderDash: [10,5],
+                       borderColor: 'rgba(75, 192, 192, 1)',
+                       backgroundColor: 'rgba(75, 192, 192, 1)'
+                   },{                    
+                       label: 'Mean',
+                       data: TMP_Model_Data1['Mean'],
+                       fill: false,
+                       borderColor: 'rgba(54, 162, 235, 1)',
+                       backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                  },{
+                       label: '+1 STDV',
+                       data: TMP_Model_Data1['plus-STDV'], 
+                       fill: false,
+                       borderDash: [10,5],
+                       borderColor: 'rgba(75, 192, 192, 1)',
+                       backgroundColor: 'rgba(75, 192, 192, 1)'
+                   }]
+               },
+                   // Configuration options go here
+                options: {
+                  tooltips: {
+                    mode: 'nearest',
+                    intersect: false
+          },
+          //deleted the crosshairjs options to fix hover - Adam
+                  scales: {
+                    xAxes: [{ 
+                      display: true,
+                      type: 'linear',
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'Percent (%)'
+               },
+ 
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Height (km)' 
+                 },
+                     ticks: {
+                       min: 0,
+                       max: 50
+                 }
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }
+          }
+         });
+         var chart30 = new Chart(ctx30, {
+           // The type of chart we want to create
+            type: "line",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                   datasets: [
+                     {
+                       label: '-1 STDV',
+                       data: BA_Model_Data3['minus-STDV'],
+                       fill: false,
+                       borderDash: [10,5],
+                       borderColor: 'rgba(75, 192, 192, 1)',
+                       backgroundColor: 'rgba(75, 192, 192, 1)'
+                   },{                    
+                       label: 'Mean',
+                       data: BA_Model_Data3['Mean'],
+                       fill: false,
+                       borderColor: 'rgba(54, 162, 235, 1)',
+                       backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                  },{
+                       label: '+1 STDV',
+                       data: BA_Model_Data3['plus-STDV'], 
+                       fill: false,
+                       borderDash: [10,5],
+                       borderColor: 'rgba(75, 192, 192, 1)',
+                       backgroundColor: 'rgba(75, 192, 192, 1)'
+                   }]
+               },
+                   // Configuration options go here
+                options: {
+                  tooltips: {
+                    mode: 'nearest',
+                    intersect: false
+          },
+          //deleted the crosshairjs options to fix hover - Adam
+                  scales: {
+                    xAxes: [{ 
+                      display: true,
+                      type: 'linear',
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'Percent (%)'
+               },
+ 
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Height (km)' 
+                 },
+                     ticks: {
+                       min: 0,
+                       max: 50
+                 }
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }
+          }
+         });
+         var chart31 = new Chart(ctx31, {
+           // The type of chart we want to create
+            type: "line",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                   datasets: [
+                     {
+                       label: '-1 STDV',
+                       data: REF_Model_Data3['minus-STDV'],
+                       fill: false,
+                       borderDash: [10,5],
+                       borderColor: 'rgba(75, 192, 192, 1)',
+                       backgroundColor: 'rgba(75, 192, 192, 1)'
+                   },{                    
+                       label: 'Mean',
+                       data: REF_Model_Data3['Mean'],
+                       fill: false,
+                       borderColor: 'rgba(54, 162, 235, 1)',
+                       backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                  },{
+                       label: '+1 STDV',
+                       data: REF_Model_Data3['plus-STDV'], 
+                       fill: false,
+                       borderDash: [10,5],
+                       borderColor: 'rgba(75, 192, 192, 1)',
+                       backgroundColor: 'rgba(75, 192, 192, 1)'
+                   }]
+               },
+                   // Configuration options go here
+                options: {
+                  tooltips: {
+                    mode: 'nearest',
+                    intersect: false
+          },
+          //deleted the crosshairjs options to fix hover - Adam
+                  scales: {
+                    xAxes: [{ 
+                      display: true,
+                      type: 'linear',
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'Percent (%)'
+               },
+ 
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Height (km)' 
+                 },
+                     ticks: {
+                       min: 0,
+                       max: 50
+                 }
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }
+          }
+         });
+         var chart32 = new Chart(ctx32, {
+           // The type of chart we want to create
+            type: "line",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                   datasets: [
+                     {
+                       label: '-1 STDV',
+                       data: TMP_Model_Data3['minus-STDV'],
+                       fill: false,
+                       borderDash: [10,5],
+                       borderColor: 'rgba(75, 192, 192, 1)',
+                       backgroundColor: 'rgba(75, 192, 192, 1)'
+                   },{                    
+                       label: 'Mean',
+                       data: TMP_Model_Data3['Mean'],
+                       fill: false,
+                       borderColor: 'rgba(54, 162, 235, 1)',
+                       backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                  },{
+                       label: '+1 STDV',
+                       data: TMP_Model_Data3['plus-STDV'], 
+                       fill: false,
+                       borderDash: [10,5],
+                       borderColor: 'rgba(75, 192, 192, 1)',
+                       backgroundColor: 'rgba(75, 192, 192, 1)'
+                   }]
+               },
+                   // Configuration options go here
+                options: {
+                  tooltips: {
+                    mode: 'nearest',
+                    intersect: false
+          },
+          //deleted the crosshairjs options to fix hover - Adam
+                  scales: {
+                    xAxes: [{ 
+                      display: true,
+                      type: 'linear',
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'Percent (%)'
+               },
+ 
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Height (km)' 
+                 },
+                     ticks: {
+                       min: 0,
+                       max: 50
+                 }
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }
+          }
+         }); /*
+         var chart36 = new Chart(ctx36, {
+           // The type of chart we want to create
+            type: "line",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                   datasets: [
+                     {
+                       label: '-1 STDV',
+                       data: BA_Model_Data4['minus-STDV'],
+                       fill: false,
+                       borderDash: [10,5],
+                       borderColor: 'rgba(75, 192, 192, 1)',
+                       backgroundColor: 'rgba(75, 192, 192, 1)'
+                   },{                    
+                       label: 'Mean',
+                       data: BA_Model_Data4['Mean'],
+                       fill: false,
+                       borderColor: 'rgba(54, 162, 235, 1)',
+                       backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                  },{
+                       label: '+1 STDV',
+                       data: BA_Model_Data4['plus-STDV'], 
+                       fill: false,
+                       borderDash: [10,5],
+                       borderColor: 'rgba(75, 192, 192, 1)',
+                       backgroundColor: 'rgba(75, 192, 192, 1)'
+                   }]
+               },
+                   // Configuration options go here
+                options: {
+                  tooltips: {
+                    mode: 'nearest',
+                    intersect: false
+          },
+          //deleted the crosshairjs options to fix hover - Adam
+                  scales: {
+                    xAxes: [{ 
+                      display: true,
+                      type: 'linear',
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'Percent (%)'
+               },
+ 
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Height (km)' 
+                 },
+                     ticks: {
+                       min: 0,
+                       max: 50
+                 }
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }
+          }
+         });
+         var chart37 = new Chart(ctx37, {
+           // The type of chart we want to create
+            type: "line",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                   datasets: [
+                     {
+                       label: '-1 STDV',
+                       data: REF_Model_Data4['minus-STDV'],
+                       fill: false,
+                       borderDash: [10,5],
+                       borderColor: 'rgba(75, 192, 192, 1)',
+                       backgroundColor: 'rgba(75, 192, 192, 1)'
+                   },{                    
+                       label: 'Mean',
+                       data: REF_Model_Data4['Mean'],
+                       fill: false,
+                       borderColor: 'rgba(54, 162, 235, 1)',
+                       backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                  },{
+                       label: '+1 STDV',
+                       data: REF_Model_Data4['plus-STDV'], 
+                       fill: false,
+                       borderDash: [10,5],
+                       borderColor: 'rgba(75, 192, 192, 1)',
+                       backgroundColor: 'rgba(75, 192, 192, 1)'
+                   }]
+               },
+                   // Configuration options go here
+                options: {
+                  tooltips: {
+                    mode: 'nearest',
+                    intersect: false
+          },
+          //deleted the crosshairjs options to fix hover - Adam
+                  scales: {
+                    xAxes: [{ 
+                      display: true,
+                      type: 'linear',
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'Percent (%)'
+               },
+ 
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Height (km)' 
+                 },
+                     ticks: {
+                       min: 0,
+                       max: 50
+                 }
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }
+          }
+         });
+         var chart38 = new Chart(ctx38, {
+           // The type of chart we want to create
+            type: "line",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                   datasets: [
+                     {
+                       label: '-1 STDV',
+                       data: TMP_Model_Data4['minus-STDV'],
+                       fill: false,
+                       borderDash: [10,5],
+                       borderColor: 'rgba(75, 192, 192, 1)',
+                       backgroundColor: 'rgba(75, 192, 192, 1)'
+                   },{                    
+                       label: 'Mean',
+                       data: TMP_Model_Data4['Mean'],
+                       fill: false,
+                       borderColor: 'rgba(54, 162, 235, 1)',
+                       backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                  },{
+                       label: '+1 STDV',
+                       data: TMP_Model_Data4['plus-STDV'], 
+                       fill: false,
+                       borderDash: [10,5],
+                       borderColor: 'rgba(75, 192, 192, 1)',
+                       backgroundColor: 'rgba(75, 192, 192, 1)'
+                   }]
+               },
+                   // Configuration options go here
+                options: {
+                  tooltips: {
+                    mode: 'nearest',
+                    intersect: false
+          },
+          //deleted the crosshairjs options to fix hover - Adam
+                  scales: {
+                    xAxes: [{ 
+                      display: true,
+                      type: 'linear',
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'Percent (%)'
+               },
+ 
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Height (km)' 
+                 },
+                     ticks: {
+                       min: 0,
+                       max: 50
+                 }
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }
+          }
+         }); */
+
+       /*
+         var chart45 = new Chart(ctx45, {
+           // The type of chart we want to create
+            type: "bar",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                   labels: latencyOccToBufferAll[0][0],
+                   datasets: latencyOccToBufrall 
+               },
+                   // Configuration options go here
+                options: {
+                  tooltips: {
+                    mode: 'nearest',
+                    intersect: false
+          },
+          //deleted the crosshairjs options to fix hover - Adam
+                  scales: {
+                    xAxes: [{ 
+                      display: true,
+                      type: 'category',
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'Time (Mins)'
+               },
+ 
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Cumulative Percent (%)' 
+                 },
+                     ticks: {
+                       min: 0,
+                       max: 100,
+                 }
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }
+          }
+         });
+       var chart46 = new Chart(ctx46, {
+           // The type of chart we want to create
+            type: "bar",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                   labels: latencyOccToAOSAll[0][0],
+                   datasets: latencyOccToAosall 
+               },
+                   // Configuration options go here
+                options: {
+                  tooltips: {
+                    mode: 'nearest',
+                    intersect: false
+          },
+          //deleted the crosshairjs options to fix hover - Adam
+                  scales: {
+                    xAxes: [{ 
+                      display: true,
+                      type: 'category',
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'Time (Mins)'
+               },
+ 
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Cumulative Percent (%)' 
+                 },
+                     ticks: {
+                       min: 0,
+                       max: 100,
+                 }
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }
+          }
+         });
+       var chart47 = new Chart(ctx47, {
+           // The type of chart we want to create
+            type: "bar",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                   labels:latencyAosToDPCAll[0][0],
+                   datasets: latencyAosToDPCall
+               },
+                   // Configuration options go here
+                options: {
+                  tooltips: {
+                    mode: 'nearest',
+                    intersect: false
+          },
+          //deleted the crosshairjs options to fix hover - Adam
+                  scales: {
+                    xAxes: [{ 
+                      display: true,
+                      type: 'category',
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'Time (Mins)'
+               },
+ 
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Cumulative Percent (%)' 
+                 },
+                     ticks: {
+                       min: 0,
+                       max: 100,
+                 }
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }
+          }
+         });
+        var chart48 = new Chart(ctx48, {
+           // The type of chart we want to create
+            type: "bar",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                   labels: latencyDPCToBufferAll[0][0],
+                   datasets: latencyDPCToBufrall 
+               },
+                   // Configuration options go here
+                options: {
+                  tooltips: {
+                    mode: 'nearest',
+                    intersect: false
+          },
+          //deleted the crosshairjs options to fix hover - Adam
+                  scales: {
+                    xAxes: [{ 
+                      display: true,
+                      type: 'category',
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'Time (Mins)'
+               },
+ 
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Cumulative Percent (%)' 
+                 },
+                     ticks: {
+                       min: 0,
+                       max: 100,
+                 }
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             }
+          }
+         });*/
+       };
+      </script>
+      {% endaddtoblock %}
+      {% render_block "js" %}
+    </body>
+</html>
+

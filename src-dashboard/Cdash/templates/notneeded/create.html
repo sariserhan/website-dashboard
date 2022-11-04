@@ -1,0 +1,14 @@
+<html>
+   
+   <body>
+      <strong>Create Page</strong>
+      <form method="post" action = "{% url 'create' %}">
+      
+           {% csrf_token %}
+           {{form.as_p}}
+      
+            <button type="submit", name="save">Submit</button>
+      </form>
+   </body>
+   
+</html>

@@ -1,0 +1,747 @@
+<!doctype html>
+<html lang="en">
+{% load cms_tags sekizai_tags %}
+{% load staticfiles %}
+    <head>
+
+      <!--Leaflet dependencies  -->
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
+      <!-- end Leaflet css dependencies -->
+
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+      <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}">
+      <link rel="stylesheet" type="text/css" href="{% static 'css/cosmic-website.css'  %}">
+      {% render_block "css" %}  
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <title>Sunshine-Dashboard UCAR demo</title>
+        <!--[if lte IE 8]>
+            <script src="{% static 'js/excanvas.js' %}"></script>
+        <![endif]-->
+    </head>
+        <nav class="navbar navbar-light navbar-expand-lg fixed-top text-center" style="background-color: #e3f2fd;">
+        <div class="row mx-auto">        
+         <a class="navbar-brand" href="/dash/multiple">
+        <img src="{% static 'images/cmslogo.png' %}"  alt="cosmic-logo">
+         </a>
+         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+     <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Dashboard-Home<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            COSMIC-2
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#">Today</a></li>
+             <div class="dropdown-divider"></div>
+            <li><a class="dropdown-item" href="#">This Week</a></li>
+             <div class="dropdown-divider"></div>
+            <li><a class="dropdown-item" href="#">This Month</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#">Other Missions</a>
+        </li>
+      </ul>
+     </div>
+       </div> 
+       </nav> 
+
+     <body style="padding-top:75px;">
+       <div class="card p-4">
+         <h5 class="card-header bg-light text-center">Leaflet Map</h5>
+       </div>
+       <div class="row">
+         <div class="col-xl-12">
+            <!-- <div class="card p-4">
+             <h5 class="card-header bg-light text-center">Leaflet Map Here</h5> -->
+      
+    
+             <!-- Leaflet Map Div here  -->             
+               <div class="container-fluid" style="height:750px;">
+                 <div id="mapid"></div>
+               </div>
+               <!-- End Leaflet Display -->
+
+              <p class="card-footer bg-secondary text-white">updated 14 days ago.</p>
+           </div>
+        <!-- </div> -->
+       </div>
+         <div class="row">
+         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Cosmic 2 Occultation Counts By FM</h5>
+              <canvas id="occChart"></canvas>
+             <p class="card-footer bg-light text-right">updated 1 hour ago.</p>
+         </div>
+        </div>
+       <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Cosmic 2 Occultation Counts Total</h5>
+             <canvas id="occBreakDownByFM"></canvas>
+             <p class="card-footer bg-light text-right">updated 1 hour ago.</p>
+         <!--    <p class="card-footer bg-light text-warning text-right">updated 14 days ago.</p> --> 
+         </div>
+       </div>
+      </div>
+     </div>
+        <div class="row">
+         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+          <div class="card p-4">
+           <h5 class="card-header bg-light text-center">SNR L1 All</h5>
+           <canvas id="snrL1All"></canvas>
+           </div>
+     </div>        
+         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+         <div class="card p-4">
+          <h5 class="card-header bg-light text-center">SNR L2 ALL</h5>
+            <canvas id="snrL2All"></canvas>
+          </div>
+       </div>
+    </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">STDV All</h5>
+            <canvas id="stdvAll"></canvas>
+         </div>
+        </div> 
+         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6"> 
+          <div class="card p-4">
+           <h5 class="card-header bg-light text-center">SNR L1 FM 1</h5>
+            <canvas id="snrL1FM1"></canvas>
+         </div>
+       </div>
+      </div> 
+       <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6"> 
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">SNR L2 FM 1</h5>
+            <canvas id="snrL2FM1"></canvas> 
+        </div>
+       </div>
+          <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6"> 
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">STDV FM 1</h5>
+            <canvas id="stdvFM1"></canvas>
+         </div>
+      </div> 
+     </div>
+     <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6"> 
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Model Comp All</h5>
+         </div>
+       </div>
+          <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6"> 
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Model Comp By FM</h5>
+         </div>
+      </div> 
+     </div>
+        {% addtoblock "js" %}
+         <!--   <script type="text/javascript" src="{% static 'static_jquery/js/jquery.js' %}" /> -->
+         <!--  <script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script> -->
+          
+         <!-- Leaflet JS dependencies -->
+          <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js" integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==" crossorigin=""></script>
+          <script type="text/javascript" src="{% static 'js/mousePosition.js' %}"></script>      
+          <script>
+            function fetchHeader(url, wch) {
+              try {
+                var req=new XMLHttpRequest();
+                req.open("HEAD", url, false);
+                req.send(null);
+                if(req.status== 200){
+                  return req.getResponseHeader(wch);
+                }
+                else return false;
+                } catch(er) {
+                  return er.message;
+                }
+             }
+          </script>
+        <!-- END Leaflet JS Dependencies -->
+
+        <!-- other dependencies -->
+          <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment@2.24.0"></script>
+          <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+          <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+          <script src="/data/{{ filename  }}.js"></script>        
+          <script src="/data/02-06-week-chartjs.js"></script>
+           <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chartjs-plugin-crosshair@1.1.4"></script> -->
+      {% endaddtoblock %}
+        </div>
+      {% addtoblock "js" %}
+        <script type="text/javascript">
+        var values_j = []; 
+        var labels_j = [];
+        var colors = [
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 99, 132, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ];
+        var background_colors= [
+          'rgba(54, 162, 235, 0.4)',
+          'rgba(255, 99, 132, 0.4)',
+          'rgba(75, 192, 192, 0.4)',
+          'rgba(255, 206, 86, 0.4)',
+          'rgba(153, 102, 255, 0.4)',
+          'rgba(255, 159, 64, 0.4)'
+        ];
+        var set = occsbyFM ;
+        var occTotal = occCountsAll ;
+        /* --------------------- COSMIC ChartJS Client ------------------------- *
+                           
+                               2019-2020 Written by Adam Sunshine
+          --------------  Data Building Starts Here ------------------------ */
+        // Bar Chart Building for ChartJS
+        function build_bar_chart(bar_data){
+          return_arr = {}; 
+          return_arr['labels'] = bar_data[0][0];
+          //console.log(snrL2Labels);
+          return_arr['gps'] = bar_data[0][1];
+          return_arr['glonass'] = bar_data[1][1];
+          //console.log(snr2GPS);
+          //console.log(snr2Glonass);
+          return return_arr;
+         }
+        //dynamically build bar charts from function call, with data
+        stdv_all = build_bar_chart(stdv_hist_all);
+        snrl1_all = build_bar_chart(snr_L1_hist_all);
+        snrl2_all = build_bar_chart(snr_L2_hist_all);
+        stdv_fm1 = build_bar_chart(stdv_hist_fm_1);
+        snrl1_fm1 = build_bar_chart(snr_L1_hist_fm_1);
+        snrl2_fm1 = build_bar_chart(snr_L2_hist_fm_1);
+        function build_data(occsdata){
+          return_obj = new Object;
+          key_arr = Object.keys(occsdata[0]);    //grab the keys from the first entry, assuming
+          key_arr.forEach(function(t){           // all data entries are consistent in length and order
+          return_obj[t]=[];
+          });                                    //turn the keys into a separate array for data plotting separation
+          occsdata.forEach(function(s){ 
+            let entry = Object.entries(s);       //turn object into iterable list
+            entry.forEach(function(i){
+             return_obj[i[0]].push(i[1]);
+            })
+          });                                      //take each list of data, set key and value dynamically based on entries  
+          //console.log(return_obj);
+          labels_j = return_obj.date;             //set labels as date and remove them from data
+          delete return_obj.date;
+          //console.log(return_obj);
+          var datasets = [];
+          let obj_list = Object.entries(return_obj); // turn new list of objects into valid chart js objects 
+          var c = 0;  
+          obj_list.forEach(function(r){
+            //console.log(r);
+            var one_display = { label: r[0],
+                                data: r[1],
+                                borderColor:colors[c],
+                                backgroundColor:background_colors[c]
+            };
+            c+=1;
+            datasets.push(one_display);
+          });                                     // use counter for dynamically grabbing color based on color array
+                                                  //  and pushing data from obj_list
+          return datasets;
+        } /* -------------------------- END OF BUILD_DATA ------------------------------------------ *
+
+                                         To Be Continued
+
+          -----------------------------------  UCAR COSMIC ------------------------------------------  */
+        var the_data = build_data(set); //call the function 
+        var occTotalData = build_data(occTotal);
+        var dateLabel = [];
+        function getDate(item){
+          date_item = moment(item);
+          dateLabel.push(date_item);
+        }
+        labels_j.forEach(getDate);
+        console.log(dateLabel);
+      </script>
+      <!-- Build Leaflet display  -->
+      <script src="/data/leaflet/geo_json_coseqrt_fm_01_good.js"></script>
+      <script src="/data/leaflet/geo_json_coseqrt_fm_02_good.js"></script>
+      <script src="/data/leaflet/geo_json_coseqrt_fm_03_good.js"></script>
+      <script src="/data/leaflet/geo_json_coseqrt_fm_04_good.js"></script>
+      <script src="/data/leaflet/geo_json_coseqrt_fm_05_good.js"></script>
+      <script src="/data/leaflet/geo_json_coseqrt_fm_06_good.js"></script>
+      <script src="/data/buildLeaflet.js"></script>
+      <script> 
+       $(document).ready(function() {
+          setInterval(function() {
+          //window.location.reload(true);
+          //alert(localStorage.checked)
+          //active = controlLayers.getOverlays();
+          controlLayers.getOverlays();
+          //window.location.reload(true);
+          //alert(controlLayers.getOverlays())
+          }, 10000);
+        });
+       window.onload = function(){ 
+          var ctx = document.getElementById('occChart').getContext('2d');
+          var ctx2 = document.getElementById('stdvAll').getContext('2d');
+          var ctx3 = document.getElementById('snrL1All').getContext('2d');
+          var ctx4 = document.getElementById('snrL2All').getContext('2d');
+          var ctx5 = document.getElementById('occBreakDownByFM').getContext('2d');
+          var ctx8 = document.getElementById('snrL1FM1').getContext('2d');
+          var ctx7 = document.getElementById('snrL2FM1').getContext('2d');
+          var ctx6 = document.getElementById('stdvFM1').getContext('2d');
+          var chart = new Chart(ctx, {
+           // The type of chart we want to create
+            type: "line",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                  labels: dateLabel, 
+                   datasets: the_data
+                },
+                   // Configuration options go here
+                options: {
+                  tooltips: {
+                    mode: 'nearest',
+                    intersect: false
+          },
+          //deleted the crosshairjs options to fix hover - Adam
+                  scales: {
+                    xAxes: [{ 
+                      display: true,
+                      type: 'time',
+                      time: {
+                        unit: 'day'
+                        },
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'Date (MMM DD)'
+               },
+ 
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Occultation Count' 
+                 },
+                     ticks: {
+                       min: 0,
+                       max: 1100
+                 }
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             },
+                title: {
+                  display: true,
+                  position: 'top',
+                  text: '{{ test_title }}',
+             }
+          }
+         });
+         var chart5 = new Chart(ctx5, {
+           // The type of chart we want to create
+            type: "line",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                  labels: dateLabel, 
+                  datasets: occTotalData
+                },
+                   // Configuration options go here
+                options: {
+                  
+          //deleted the crosshairjs options to fix hover - Adam
+                  scales: {
+                    xAxes: [{ 
+                      display: true,
+                      type: 'time',
+                      time: {
+                        unit: 'day'
+                        },
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'Date (MMM DD)'
+               },
+ 
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Occultation Count' 
+                 },
+                     ticks: {
+                       min: 0,
+                       max: 5500
+                 }
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             },
+                title: {
+                  display: true,
+                  position: 'top',
+                  text: '{{ test_title }}',
+             }
+          }
+         });
+
+         var chart2 = new Chart(ctx2, {
+           // The type of chart we want to create
+            type: "bar",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                  labels: stdv_all['labels'], 
+                  datasets: [{
+                    label: "GPS",
+                    data: stdv_all['gps'],
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+           }, {
+                    label: "Glonass",
+                    data: stdv_all['glonass'],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)', 
+                  }]
+                },
+                   // Configuration options go here
+                options: {
+                  scales: {
+                    xAxes: [{ 
+                     display: true,
+                      type: 'category',
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'STDV (microrads)'
+               }, ticks: {
+                   min: 0,
+                   max: 4,
+                   stepSize: 0.25, 
+                   display: true
+               } 
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Percent %' 
+                 },
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             },
+                title: {
+                  display: true,
+                  position: 'top',
+                  text: 'STDV for Bending Angle RO',
+             }
+          }
+         });
+        var chart3 = new Chart(ctx3, {
+           // The type of chart we want to create
+            type: "bar",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                labels: snrl1_all['labels'],   
+                datasets: [{ 
+                  label: "GPS",
+                  data: snrl1_all['gps'],
+                  borderColor: 'rgba(54, 162, 235, 1)',
+                  backgroundColor: 'rgba(54, 162, 235, 0.5)',
+          },{
+                   label: "Glonass",
+                   data: snrl1_all['glonass'],
+                   borderColor: 'rgba(75, 192, 192, 1)',
+                   backgroundColor: 'rgba(75, 192, 192, 0.5)', 
+                  }]
+                },
+                   // Configuration options go here
+                options: {
+                  scales: {
+                    xAxes: [{ 
+                     display: true,
+                      type: 'category',
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'V/V'
+               }
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Percent %' 
+                 },
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             },
+                title: {
+                  display: true,
+                  position: 'top',
+                  text: 'CDAAC Good QC Neutral Atm SNR Ave L1',
+             }
+          }
+         });
+        var chart4 = new Chart(ctx4, {
+           // The type of chart we want to create
+            type: "bar",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                  labels:  snrl2_all['labels'],
+                  datasets: [{ 
+                    label: "GPS",
+                    data: snrl2_all['gps'],
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            }, {
+                    label: "Glonass",
+                    data: snrl2_all['glonass'],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)', 
+                  }]
+                },
+                   // Configuration options go here
+                options: {
+                  scales: {
+                    xAxes: [{ 
+                     display: true,
+                      type: 'category',
+                      scaleLabel: {
+                        display: true,
+                        labelString: ' V/V'
+               }
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Percent %' 
+                 },
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             },
+                title: {
+                  display: true,
+                  position: 'top',
+                  text: 'CDAAC Good QC neutral Atm Occ SNR Ave L2',
+             }
+          }
+         });
+          var chart6 = new Chart(ctx6, {
+           // The type of chart we want to create
+            type: "bar",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                  labels:  stdv_fm1['labels'],
+                  datasets: [{ 
+                    label: "GPS",
+                    data: stdv_fm1['gps'],
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            }, {
+                    label: "Glonass",
+                    data: stdv_fm1['glonass'],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)', 
+                  }]
+                },
+                   // Configuration options go here
+                options: {
+                  scales: {
+                    xAxes: [{ 
+                     display: true,
+                      type: 'category',
+                      scaleLabel: {
+                        display: true,
+                        labelString: ' V/V'
+               }
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Percent %' 
+                 },
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             },
+                title: {
+                  display: true,
+                  position: 'top',
+                  text: 'CDAAC Good QC neutral Atm Occ SNR Ave L2',
+             }
+          }
+         });
+          var chart7 = new Chart(ctx7, {
+           // The type of chart we want to create
+            type: "bar",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                  labels:  snrl1_fm1['labels'],
+                  datasets: [{ 
+                    label: "GPS",
+                    data: snrl1_fm1['gps'],
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            }, {
+                    label: "Glonass",
+                    data: snrl1_fm1['glonass'],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)', 
+                  }]
+                },
+                   // Configuration options go here
+                options: {
+                  scales: {
+                    xAxes: [{ 
+                     display: true,
+                      type: 'category',
+                      scaleLabel: {
+                        display: true,
+                        labelString: ' V/V'
+               }
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Percent %' 
+                 },
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             },
+                title: {
+                  display: true,
+                  position: 'top',
+                  text: 'CDAAC Good QC neutral Atm Occ SNR Ave L2',
+             }
+          }
+         });
+          var chart8 = new Chart(ctx8, {
+           // The type of chart we want to create
+            type: "bar",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                  labels:  snrl2_fm1['labels'],
+                  datasets: [{ 
+                    label: "GPS",
+                    data: snrl2_fm1['gps'],
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            }, {
+                    label: "Glonass",
+                    data: snrl2_fm1['glonass'],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)', 
+                  }]
+                },
+                   // Configuration options go here
+                options: {
+                  scales: {
+                    xAxes: [{ 
+                     display: true,
+                      type: 'category',
+                      scaleLabel: {
+                        display: true,
+                        labelString: ' V/V'
+               }
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Percent %' 
+                 },
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             },
+                title: {
+                  display: true,
+                  position: 'top',
+                  text: 'CDAAC Good QC neutral Atm Occ SNR Ave L2',
+             }
+          }
+         });
+       };
+      </script>
+      {% endaddtoblock %}
+      {% render_block "js" %}
+    </body>
+</html>

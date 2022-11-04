@@ -1,0 +1,97 @@
+{% load cms_tags sekizai_tags %}
+{% load staticfiles %}
+<html>
+    <head>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+      <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}">
+      <link rel="stylesheet" type="text/css" href="{% static 'css/cosmic-website.css'  %}">
+      {% render_block "css" %}
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <title>COSMIC Dashboard UCAR</title>
+        <!--[if lte IE 8]>
+            <script src="{% static 'js/excanvas.js' %}"></script>
+        <![endif]-->
+  
+        <nav class="navbar navbar-light navbar-expand-lg fixed-top text-center" style="background-color: #e3f2fd;">
+        <div class="row mx-auto">
+         <a class="navbar-brand" href="#">
+        <img src="{% static 'images/cmslogo.png' %}"  alt="cosmic-logo">
+         </a>
+         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+     <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Dashboard: Home<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            COSMIC-2
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+           <!-- <li><a class="dropdown-item" href="/dash/leo-dev-ml1/day">Yesterday - leo-dev-ml1</a></li>
+            <div class="dropdown-divider"></div>
+            <li><a class="dropdown-item" href="/dash/leo-dev-ml1/week">Past Week - leo-dev-ml1</a></li>
+            <div class="dropdown-divider"></div> -->
+           <li><a class="dropdown-item" href="/cosmic-2/stage/day">Yesterday - leo-a-ml</a></li>
+            <div class="dropdown-divider"></div>
+            <li><a class="dropdown-item" href="/cosmic-2/stage/week">Past Week - leo-a-ml</a></li>
+       </ul>
+         
+        </li>
+         <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="otherDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Other Missions
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="otherDropdown">
+            <li><a class="dropdown-item" href="/kompsat/day">Yesterday - Kompsat 5</a></li>
+            <div class="dropdown-divider"></div>
+            <li><a class="dropdown-item" href="/kompsat/week">Past Week - Kompsat 5</a></li>
+            <div class="dropdown-divider"></div>
+           <li><a class="dropdown-item" href="/paz/day">Yesterday - Paz</a></li>
+            <div class="dropdown-divider"></div>
+            <li><a class="dropdown-item" href="/paz/week">Past Week - Paz</a></li>
+            <div class="dropdown-divider"></div>
+            <li><a class="dropdown-item" href="/spire/day">Yesterday - Spire</a></li>
+            <div class="dropdown-divider"></div>
+            <li><a class="dropdown-item" href="/spire/week">Past Week - Spire</a></li>
+        </ul>
+       </li>
+       <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Gallery
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="/mygallery/gpsclocks">GPS Satellite Data</a></li>
+            <div class="dropdown-divider"></div>
+            <li><a class="dropdown-item" href="/mygallery/downlinks">Downlinks Statistics - COSMIC-2</a></li>
+            <div class="dropdown-divider"></div>
+           <li><a class="dropdown-item"  href="/mygallery/raldtc">Observation Error plots - RAL DTC</a></li>
+          </ul>
+        </li>
+     </div>
+       </div>
+       </nav>  
+    </head>
+    <body style="padding-top:75px;">
+         <div class="text-center">
+          <img src="{% static 'images/c2-earth-profiles.jpg' %}" alt="cosmic-profiles"> 
+         </div>
+        <div style="width:75%;">
+        {% addtoblock "js" %}
+          <script type="text/javascript" src="{% static 'static_jquery/js/jquery.js' %}" />
+          <script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script>
+          <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+          <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment@2.24.0"></script>
+          <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+          <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>        
+      {% endaddtoblock %}
+        </div>
+        <script type="text/javascript">
+      </script>
+      {% render_block "js" %}
+    </body>
+</html>

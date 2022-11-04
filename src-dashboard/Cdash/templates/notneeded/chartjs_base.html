@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+{% load cms_tags sekizai_tags %}
+{% load staticfiles %}
+    <head>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+      {% render_block "css" %}  
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <title>Sunshine-Dashboard UCAR demo</title>
+        <!--[if lte IE 8]>
+            <script src="{% static 'js/excanvas.js' %}"></script>
+        <![endif]-->
+    </head>
+        <nav class="navbar navbar-light navbar-expand-lg fixed-top text-center" style="background-color: #e3f2fd;">
+        <div class="row mx-auto">        
+         <h5 class="navbar-brand" href="/dash/multiple">Dashboard MVP</h5>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+     <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Dropdown
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#">Disabled</a>
+        </li>
+      </ul>
+     </div>
+       </div> 
+       </nav> 
+
+
+     <body style="padding-top:75px;">
+       <div class="card p-4" style="height:300px;">
+         <h5 class="card-header bg-light text-center">Data Table Here</h5>
+       </div>
+       <div class="card p-4" style="height:300px;">
+         <h5 class="card-header bg-light text-center">Leaflet Map Here</h5>
+       </div>
+        <div class="card-deck">   
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">All Datasets (test)</h5>
+             <canvas id="myChart"></canvas>
+            <p class="card-footer bg-light text-right">updated 14 days ago.</p>
+           </div>
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Sample Data goes Here</h5>
+           <p class="card-footer bg-light card-border-warning text-right">updated 14 days ago.</p>
+         </div>
+       </div>
+       <div class="card-deck" style="height:300px;">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">High SNR L1</h5>
+         </div>
+         <div class="card p-4">
+          <h5 class="card-header bg-light text-center">High SNR L2</h5>
+         </div>
+       </div>
+        <div class="card-deck" style="height:300px;">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">STDV Histograms</h5>
+         </div>
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Histograms PT 2</h5>
+         </div>
+       </div>
+       <div class="card-deck" style="height:300px;">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Model Comparisons</h5>
+         </div>
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">More Comparisons</h5>
+         </div>
+       </div>
+          {% addtoblock "js" %}
+         <!--   <script type="text/javascript" src="{% static 'static_jquery/js/jquery.js' %}" /> -->
+         <!--  <script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script> -->
+          <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+          <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+          <script src="/data/{{ filename  }}.js"></script>        
+      {% endaddtoblock %}
+        </div>
+      {% addtoblock "js" %}
+        <script type="text/javascript">
+        var values_j = []; 
+        var labels_j = [];
+        var colors = [
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 99, 132, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ];
+        var background_colors= [
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+        ];
+        var set = occsC3;
+        /* --------------------- COSMIC ChartJS Client ------------------------- *
+                           
+                               11/2019 Written by Adam Sunshine
+
+          --------------  Data Building functionality starts here! ----------------- */
+
+        function build_data(occsdata){
+          return_obj = new Object;
+          key_arr = Object.keys(occsdata[0]);    //grab the keys from the first entry, assuming
+          key_arr.forEach(function(t){           // all data entries are consistent in length and order
+          return_obj[t]=[];
+          });                                    //turn the keys into a separate array for data plotting separation
+          occsdata.forEach(function(s){ 
+            let entry = Object.entries(s);       //turn object into iterable list
+            entry.forEach(function(i){
+             return_obj[i[0]].push(i[1]);
+            })
+          });                                      //take each list of data, set key and value dynamically based on entries  
+          //console.log(return_obj);
+          labels_j = return_obj.date;             //set labels as date and remove them from data
+          delete return_obj.date;
+          //console.log(return_obj);
+          var datasets = [];
+          let obj_list = Object.entries(return_obj); // turn new list of objects into valid chart js objects 
+          var c = 0;  
+          obj_list.forEach(function(r){
+            //console.log(r);
+            var one_display = { label: r[0],
+                                data: r[1],
+                                borderColor:colors[c],
+                                backgroundColor:background_colors[c]
+            };
+            c+=1;
+            datasets.push(one_display);
+          });                                     // use counter for dynamically grabbing color based on color array
+                                                  //  and pushing data from obj_list
+          return datasets;
+        } /* -------------------------- END OF BUILD_DATA ------------------------------------------ *
+
+                                         To Be Continued
+
+          -----------------------------------  UCAR COSMIC ------------------------------------------  */
+        var the_data = build_data(set); //call the function 
+        window.onload = function(){ 
+          var ctx = document.getElementById('myChart').getContext('2d');
+          var chart = new Chart(ctx, {
+           // The type of chart we want to create
+            type: 'line',
+           // The data for our dataset
+            data: {
+                  labels: labels_j, 
+                   datasets: the_data
+                },
+                   // Configuration options go here
+                options: {
+                  scales: {
+                    xAxes: [{ 
+                      display: true,
+                      scaleLabel: {
+                        display: true,
+                        fontSize: 28,
+                        labelString: 'Date (YYYY-MM-DD)'
+               },
+ 
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         fontSize: 30,
+                         labelString: 'Occultation Count' 
+                 }
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 22,
+                    boxWidth: 40
+               }
+             },
+                title: {
+                  display: true,
+                  position: 'top',
+                  fontSize: 30,
+                  text: '{{ test_title }}',
+             }
+          }
+         });
+        };
+      </script>
+      {% endaddtoblock %}
+      {% render_block "js" %}
+    </body>
+</html>

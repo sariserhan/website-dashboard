@@ -1,0 +1,25 @@
+dbOccTimeSeries.py started at 2022-07-28 01:30:03 UTC
+
+Date range: 2022-06-27 to 2022-07-27
+
+Querying host leo-a-ch
+  Mission coseqrt
+  Mission geooptert
+  Mission kompsat5rt
+  Mission pazrt
+  Mission spireert
+
+Querying host leo-b-ch
+  Mission coseqrt
+  Mission geooptert
+  Mission kompsat5rt
+  Mission pazrt
+  Mission spireert
+
+Making figures
+Traceback (most recent call last):
+  File "/opt/cosmic/dpcStatusPlots/software/gnssProc/c2Monitors/bin/dbOccTimeSeries.py", line 116, in <module>
+    c2Monitors.dbOcc.dbOccTimeSeriesPlotCountAtmObj( data, args, 'neutral' )
+  File "/opt/cosmic/dpcStatusPlots/software/gnssProc/c2Monitors/libsrc/python/c2Monitors/dbOcc.py", line 1771, in dbOccTimeSeriesPlotCountAtmObj
+    plotDataFracAtmObjOcct[-1][1].append(       data['db'][hostDb][missionDb][occType][date][fm]['totalAtmObj'] / \
+ZeroDivisionError: division by zero

@@ -1,0 +1,404 @@
+
+var pathID = "/data/galleryPlayground/rachelDownlinks/";
+
+
+
+var galleryConfig1 = {
+/*
+  "group1": {
+    "captions": [
+      "All Ground Stations - usdms-ch,",
+      "All Ground Stations - usdms-ml,", 
+     ],
+   "header": "All Stations",
+   "images": [
+     "output-ch/downlinks_recd_usdms-ch_coseqrt_allStations_2022-01-13_to_2022-01-27.png",
+     "output-ch/downlinks_sched_usdms-ch_coseqrt_allStations_2022-01-13_to_2022-01-27.png",
+     "output-ch/downlinks_schedRecdPerc_usdms-ch_coseqrt_allStations.png",
+     "output-ml/downlinks_recd_usdms-ml_coseqrt_allStations.png",
+     "output-ml/downlinks_sched_usdms-ml_coseqrt_allStations.png",
+     "output-ml/downlinks_schedRecdPerc_usdms-ml_coseqrt_allStations.png",
+
+     ],
+   "numCol": 6,
+   "title
+
+  "group1": {
+    "captions": [
+      "All Stations, usdms-ch,",
+      "All Stations, usdms-ch,",
+      "All Stations, usdms-ch,",
+      "All Stations, usdms-ml,",
+      "All Stations, usdms-ml,",
+      "All Stations, usdms-ml,",
+       
+      
+    ],
+
+    "header": "All Stations",
+    "images": [
+
+      "output-ch/downlinks_recd_usdms-ch_coseqrt_allStations_2022-01-13_to_2022-01-27.png",
+     "output-ch/downlinks_sched_usdms-ch_coseqrt_allStations_2022-01-13_to_2022-01-27.png",	
+      "output-ch/downlinks_schedRecdPerc_usdms-ch_coseqrt_allStations.png",
+      "output-ml/downlinks_schedRecdPerc_usdms-ml_coseqrt_allStations.png",
+      "output-ml/downlinks_sched_usdms-ml_coseqrt_allStations.png",
+     "output-ml/downlinks_schedRecdPerc_usdms-ml_coseqrt_allStations.png",
+   /* "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_darwin.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_ghana1.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_guam01.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_hawaii.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_hondur.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_kuwait.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_maurit.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_tahiti.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_twnts1.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_twnts3.png",
+*/
+  ],
+    "numCol": 2,
+    "title": "COSMIC-2 Downlinks Scheduled vs Received | All GroundStations"
+  },
+
+  "group2": {
+    "captions": [
+      "All Ground Stations,",
+      "Cuiaba,",
+      "Darwin,",
+      "Ghana,",
+      "Guam,",
+      "Hawaii,",
+      "Honduras,",
+      "Kuwait,",
+      "Mauritius,",
+      "Tahiti,",
+      "Taiwan #1,",
+      "Taiwan #3,",
+    ],
+    
+    "header": "usdms-ch",
+    "images": [
+
+
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_all.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_cuiaba.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_darwin.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_ghana1.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_guam01.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_hawaii.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_hondur.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_kuwait.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_maurit.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_tahiti.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_twnts1.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_twnts3.png",
+  ],
+    "numCol": 6,
+    "title": "COSMIC-2 Downlinks Scheduled vs Received | All GroundStations"
+  },
+  "group3": {
+    "captions": [
+      "All Ground Stations,",
+      "Cuiaba,",
+      "Darwin,",
+      "Ghana,",
+      "Guam,",
+      "Hawaii,",
+      "Honduras,",
+      "Kuwait,",
+      "Mauritius,",
+      "Tahiti,",
+      "Taiwan #1,",
+    
+    ],
+    /*"header": "usdms-ch",*/
+     "header": "usdms-ml", 	
+    "images": [
+      "output-ml/downlinks_schedRecd_usdms-ml_coseqrt_all.png",
+      "output-ml/downlinks_schedRecd_usdms-ml_coseqrt_cuiaba.png",
+      "output-ml/downlinks_schedRecd_usdms-ml_coseqrt_darwin.png",
+      "output-ml/downlinks_schedRecd_usdms-ml_coseqrt_ghana1.png",
+      "output-ml/downlinks_schedRecd_usdms-ml_coseqrt_guam01.png",
+      "output-ml/downlinks_schedRecd_usdms-ml_coseqrt_hawaii.png",
+      "output-ml/downlinks_schedRecd_usdms-ml_coseqrt_hondur.png",
+      "output-ml/downlinks_schedRecd_usdms-ml_coseqrt_kuwait.png",
+      "output-ml/downlinks_schedRecd_usdms-ml_coseqrt_maurit.png",
+      "output-ml/downlinks_schedRecd_usdms-ml_coseqrt_tahiti.png",
+      "output-ml/downlinks_schedRecd_usdms-ml_coseqrt_twnts1.png",
+
+     /* "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_all.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_cuiaba.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_darwin.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_ghana1.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_guam01.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_hawaii.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_hondur.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_kuwait.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_maurit.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_tahiti.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_twnts1.png",
+      "output-ch/downlinks_schedRecd_usdms-ch_coseqrt_twnts3.png",*/ 
+    ],
+    "numCol": 6,
+    "title": "COSMIC-2 Downlinks Scheduled vs Received | All GroundStations"
+  },
+  "group4": {
+    "captions": [
+      "All Ground Stations,",
+      "Cuiaba,",
+      "Darwin,",
+      "Ghana,",
+      "Guam,",
+      "Hawaii,",
+      "Honduras,",
+      "Kuwait,",
+      "Mauritius,",
+      "Tahiti,",
+      "Taiwan #1,",
+      "Taiwan #3,",
+    ],
+/*
+    "header": "usdms-ch",
+  
+*/
+   "header": "Percentage on usdms-ch",
+  "images": [
+  
+
+/*
+      "output-ch/downlinks_timeDiff_usdms-ch_coseqrt_all.png",
+      "output-ch/downlinks_timeDiff_usdms-ch_coseqrt_cuiaba.png",
+      "output-ch/downlinks_timeDiff_usdms-ch_coseqrt_darwin.png",
+      "output-ch/downlinks_timeDiff_usdms-ch_coseqrt_ghana1.png",
+      "output-ch/downlinks_timeDiff_usdms-ch_coseqrt_guam01.png",
+      "output-ch/downlinks_timeDiff_usdms-ch_coseqrt_hawaii.png",
+      "output-ch/downlinks_timeDiff_usdms-ch_coseqrt_hondur.png",
+      "output-ch/downlinks_timeDiff_usdms-ch_coseqrt_kuwait.png",
+      "output-ch/downlinks_timeDiff_usdms-ch_coseqrt_maurit.png",
+      "output-ch/downlinks_timeDiff_usdms-ch_coseqrt_tahiti.png",
+      "output-ch/downlinks_timeDiff_usdms-ch_coseqrt_twnts1.png",
+      "output-ch/downlinks_timeDiff_usdms-ch_coseqrt_twnts3.png", 
+*/
+
+      "output-ch/downlinks_schedRecdPerc_usdms-ch_coseqrt_all.png",
+      "output-ch/downlinks_schedRecdPerc_usdms-ch_coseqrt_cuiaba.png",
+      "output-ch/downlinks_schedRecdPerc_usdms-ch_coseqrt_darwin.png",
+      "output-ch/downlinks_schedRecdPerc_usdms-ch_coseqrt_ghana1.png",
+      "output-ch/downlinks_schedRecdPerc_usdms-ch_coseqrt_guam01.png",
+      "output-ch/downlinks_schedRecdPerc_usdms-ch_coseqrt_hawaii.png",
+      "output-ch/downlinks_schedRecdPerc_usdms-ch_coseqrt_hondur.png",
+      "output-ch/downlinks_schedRecdPerc_usdms-ch_coseqrt_kuwait.png",
+      "output-ch/downlinks_schedRecdPerc_usdms-ch_coseqrt_maurit.png",
+      "output-ch/downlinks_schedRecdPerc_usdms-ch_coseqrt_tahiti.png",
+      "output-ch/downlinks_schedRecdPerc_usdms-ch_coseqrt_twnts1.png",
+      "output-ch/downlinks_schedRecdPerc_usdms-ch_coseqrt_twnts3.png"  
+
+  ],
+    "numCol": 6,
+/*    
+
+"title": "COSMIC-2 Downlinks Time Difference | All GroundStations"
+*/
+
+ 
+"title": "COSMIC-2 Downlinks Scheduled vs Received | All GroundStations"
+ },
+  "group5": {
+    "captions": [
+      "All Ground Stations,",
+      "Cuiaba,",
+      "Darwin,",
+      "Ghana,",
+      "Guam,",
+      "Hawaii,",
+      "Honduras,",
+      "Kuwait,",
+      "Mauritius,",
+      "Tahiti,",
+      "Taiwan #1,",
+    ],
+    "header": "Percentage on usdms-ml",
+    "images": [
+      "output-ml/downlinks_schedRecdPerc_usdms-ml_coseqrt_all.png",
+      "output-ml/downlinks_schedRecdPerc_usdms-ml_coseqrt_cuiaba.png",
+      "output-ml/downlinks_schedRecdPerc_usdms-ml_coseqrt_darwin.png",
+      "output-ml/downlinks_schedRecdPerc_usdms-ml_coseqrt_ghana1.png",
+      "output-ml/downlinks_schedRecdPerc_usdms-ml_coseqrt_guam01.png",
+      "output-ml/downlinks_schedRecdPerc_usdms-ml_coseqrt_hawaii.png",
+      "output-ml/downlinks_schedRecdPerc_usdms-ml_coseqrt_hondur.png",
+      "output-ml/downlinks_schedRecdPerc_usdms-ml_coseqrt_kuwait.png",
+      "output-ml/downlinks_schedRecdPerc_usdms-ml_coseqrt_maurit.png",
+      "output-ml/downlinks_schedRecdPerc_usdms-ml_coseqrt_tahiti.png",
+      "output-ml/downlinks_schedRecdPerc_usdms-ml_coseqrt_twnts1.png",
+    ],
+    "numCol": 6,
+    "title": "COSMIC-2 Downlinks Scheduled vs Received | All GroundStations"
+  },
+  "group6": {
+    "captions": [
+      "All Ground Stations,",
+      "Cuiaba,",
+      "Darwin,",
+      "Ghana,",
+      "Guam,",
+      "Hawaii,",
+      "Honduras,",
+      "Kuwait,",
+      "Mauritius,",
+      "Tahiti,",
+      "Taiwan #1,",
+    ],
+/*
+    "header": "usdms-ml",
+*/
+
+    "header": "usdms-ch",
+	
+    "images": [
+
+/*
+      "output-ml/downlinks_schedRecd_usdms-ml_coseqrt_all.png",
+      "output-ml/downlinks_schedRecd_usdms-ml_coseqrt_cuiaba.png",
+      "output-ml/downlinks_schedRecd_usdms-ml_coseqrt_darwin.png",
+      "output-ml/downlinks_schedRecd_usdms-ml_coseqrt_ghana1.png",
+      "output-ml/downlinks_schedRecd_usdms-ml_coseqrt_guam01.png",
+      "output-ml/downlinks_schedRecd_usdms-ml_coseqrt_hawaii.png",
+      "output-ml/downlinks_schedRecd_usdms-ml_coseqrt_hondur.png",
+      "output-ml/downlinks_schedRecd_usdms-ml_coseqrt_kuwait.png",
+      "output-ml/downlinks_schedRecd_usdms-ml_coseqrt_maurit.png",
+      "output-ml/downlinks_schedRecd_usdms-ml_coseqrt_tahiti.png",
+      "output-ml/downlinks_schedRecd_usdms-ml_coseqrt_twnts1.png",
+  
+*/
+
+      "output-ch/downlinks_timeDiff_usdms-ch_coseqrt_all.png",
+      "output-ch/downlinks_timeDiff_usdms-ch_coseqrt_cuiaba.png",
+      "output-ch/downlinks_timeDiff_usdms-ch_coseqrt_darwin.png",
+      "output-ch/downlinks_timeDiff_usdms-ch_coseqrt_ghana1.png",
+      "output-ch/downlinks_timeDiff_usdms-ch_coseqrt_guam01.png",
+      "output-ch/downlinks_timeDiff_usdms-ch_coseqrt_hawaii.png",
+      "output-ch/downlinks_timeDiff_usdms-ch_coseqrt_hondur.png",
+      "output-ch/downlinks_timeDiff_usdms-ch_coseqrt_kuwait.png",
+      "output-ch/downlinks_timeDiff_usdms-ch_coseqrt_maurit.png",
+      "output-ch/downlinks_timeDiff_usdms-ch_coseqrt_tahiti.png",
+      "output-ch/downlinks_timeDiff_usdms-ch_coseqrt_twnts1.png",
+      "output-ch/downlinks_timeDiff_usdms-ch_coseqrt_twnts3.png",
+
+  ],
+    "numCol":6,
+    "title": "COSMIC-2 Downlinks Scheduled vs Received | All GroundStations"
+  },
+  "group7": {
+    "captions": [
+      "All Ground Stations,",
+      "Cuiaba,",
+      "Darwin,",
+      "Ghana,",
+      "Guam,",
+      "Hawaii,",
+      "Honduras,",
+      "Kuwait,",
+      "Mauritius,",
+      "Tahiti,",
+      "Taiwan #1,",
+    ],
+    "header": "usdms-ml",
+    "images": [
+      "output-ml/downlinks_timeDiff_usdms-ml_coseqrt_all.png",
+      "output-ml/downlinks_timeDiff_usdms-ml_coseqrt_cuiaba.png",
+      "output-ml/downlinks_timeDiff_usdms-ml_coseqrt_darwin.png",
+      "output-ml/downlinks_timeDiff_usdms-ml_coseqrt_ghana1.png",
+      "output-ml/downlinks_timeDiff_usdms-ml_coseqrt_guam01.png",
+      "output-ml/downlinks_timeDiff_usdms-ml_coseqrt_hawaii.png",
+      "output-ml/downlinks_timeDiff_usdms-ml_coseqrt_hondur.png",
+      "output-ml/downlinks_timeDiff_usdms-ml_coseqrt_kuwait.png",
+      "output-ml/downlinks_timeDiff_usdms-ml_coseqrt_maurit.png",
+      "output-ml/downlinks_timeDiff_usdms-ml_coseqrt_tahiti.png",
+      "output-ml/downlinks_timeDiff_usdms-ml_coseqrt_twnts1.png",
+    ],
+    "numCol": 6,
+    "title": "COSMIC-2 Downlinks Time Difference | All GroundStations"
+  },
+ };
+
+/*
+Example config object below, with 2 sample groups
+
+var galleryConfig1 = {
+  "group1": {
+    "captions": [
+      "COSMIC-2 BND, Past month",
+      "COSMIC-2 REF, Past month" ,
+      "GeoOptics BND, Past month",
+      "GeoOptics REF, Past month",
+      "Kompsat-5 BND, Past month",
+      "Kompsat-5 REF, Past month",
+      "Paz BND, Past month",
+      "Paz REF, Past month",
+    ], 
+    "header": "Percent Error vs Height (KM)",
+    "images": [
+      "total_variance.c2.gps_bnd.2020121400-2021011500.lat_bands_obs_err.png",
+      "total_variance.c2.gps_ref.2020121400-2021011500.lat_bands_obs_err.png",
+      "total_variance.geoopt.gps_bnd.2020121400-2021011500.lat_bands_obs_err.png",
+      "total_variance.geoopt.gps_ref.2020121400-2021011500.lat_bands_obs_err.png",
+      "total_variance.kom.gps_bnd.2020121400-2021011500.lat_bands_obs_err.png",
+      "total_variance.kom.gps_ref.2020121400-2021011500.lat_bands_obs_err.png",
+      "total_variance.paz.gps_bnd.2020121400-2021011500.lat_bands_obs_err.png",
+      "total_variance.paz.gps_ref.2020121400-2021011500.lat_bands_obs_err.png",
+    ],
+    "numCol": 7,
+    "title": "RAL DTC Variance Example Plots | All Missions"
+  },
+  "group2": {
+    "captions": [
+      "Latitude Ranges, Degrees",
+    ],
+    "header": "All Missions",
+    "images": [
+      "lat_bands.png",
+    ],
+    "numCol": 6,
+    "title": "Legend for Latitude Band Ranges | Degrees"
+  },
+   "group1": {
+    "captions": [
+      "COSMIC-2 REF, Past day" ,
+      "GeoOptics REF, Past day",
+      "KOMPSat-5 REF, Past day",
+      "Paz REF, Past day",
+      "Legend for Latitude Ranges, Degrees",
+    ],
+    "header": "Height (KM) vs Percent Error",
+    "images": [
+      "day/total_variance.c2.gps_ref.2021061900-2021061918.lat_bands_obs_err.png",
+      "day/total_variance.geoopt.gps_ref.2021061900-2021061918.lat_bands_obs_err.png",
+      "day/total_variance.kom.gps_ref.2021061900-2021061918.lat_bands_obs_err.png",
+      "day/total_variance.paz.gps_ref.2021061900-2021061918.lat_bands_obs_err.png",
+      "lat_bands.png",
+    ],
+    "numCol": 6,
+    "title": "RAL DTC Refractivity Variance Plots | All Missions"
+  },
+  "group2": {
+    "captions": [
+      "COSMIC-2 BND, Past day",
+      "GeoOptics BND, Past day",
+      "KOMPSat-5 BND, Past day",
+      "Paz BND, Past day",
+      "Legend for Latitude Ranges, Degrees",
+    ],
+    "header": "Impact Height (KM) vs Percent Error",
+    "images": [
+      "day/total_variance.geoopt.gps_bnd.2021061900-2021061918.lat_bands_obs_err.png",
+      "day/total_variance.geoopt.gps_bnd.2021061900-2021061918.lat_bands_obs_err.png",
+      "day/total_variance.kom.gps_bnd.2021061900-2021061918.lat_bands_obs_err.png",
+      "day/total_variance.paz.gps_bnd.2021061900-2021061918.lat_bands_obs_err.png",
+      "lat_bands.png",
+    ],
+    "numCol": 6,
+    "title": "RAL DTC Bending Angle Variance Plots | All Missions"
+  },
+};
+*/
+

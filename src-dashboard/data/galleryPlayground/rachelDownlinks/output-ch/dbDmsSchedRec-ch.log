@@ -1,0 +1,11 @@
+dbDmsSchedRec.py started at 2022-07-28 01:15:03 UTC
+
+Fetching downlink scheduled/received data
+Plotting downlinks scheduled for coseqrt on usdms-ch
+Plotting downlinks received for coseqrt on usdms-ch
+Plotting downlinks scheduled/received for coseqrt on usdms-ch
+Plotting time between downlinks for coseqrt on usdms-ch
+Plotting Reed Solomon error for coseqrt on usdms-ch
+
+dbDmsSchedRec.py done at 2022-07-28 01:15:30 UTC (elapsed time 27 sec)
+

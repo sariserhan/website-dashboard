@@ -1,0 +1,47 @@
+{% load cms_tags sekizai_tags %}
+{% load staticfiles %}
+<html>
+    <head>
+      {% render_block "css" %}  
+      <title>Sunshine-Dashboard UCAR demo</title>
+        <!--[if lte IE 8]>
+            <script src="{% static 'js/excanvas.js' %}"></script>
+        <![endif]-->
+    </head>
+    {% cms_toolbar  %}
+    <body>
+        <div style="width:75%;">
+       <h1 style="text-align:center;">{{ test_title }}</h1>
+        <canvas id="myChart"></canvas>
+        {% addtoblock "js" %}
+          <script type="text/javascript" src="{% static 'static_jquery/js/jquery.js' %}" />
+          <script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script>
+          <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>        
+      {% endaddtoblock %}
+        </div>
+        <script type="text/javascript">
+        window.onload = function(){
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var chart = new Chart(ctx, {
+           // The type of chart we want to create
+            type: 'bar',
+
+           // The data for our dataset
+             data: {
+                  labels: {{ labels|safe }}, 
+                   datasets: [{
+                     label: 'COSMIC-2 Occultation Readings',
+                        backgroundColor: 'rgb(51, 204, 204)',
+                         borderColor:'rgb(153, 230, 230)',
+                        data:{{ values }},
+                  }]
+                },
+
+                   // Configuration options go here
+                options: {}
+         });
+        }
+      </script>
+      {% render_block "js" %}
+    </body>
+</html>

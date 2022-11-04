@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="en">
+{% load cms_tags sekizai_tags %}
+{% load staticfiles %}
+    <head>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+      <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}">
+      <link rel="stylesheet" type="text/css" href="{% static 'css/cosmic-website.css'  %}">
+      {% render_block "css" %}  
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <title>Sunshine-Dashboard UCAR demo</title>
+        <!--[if lte IE 8]>
+            <script src="{% static 'js/excanvas.js' %}"></script>
+        <![endif]-->
+    </head>
+        <nav class="navbar navbar-light navbar-expand-lg fixed-top text-center" style="background-color: #e3f2fd;">
+        <div class="row mx-auto">        
+         <a class="navbar-brand" href="/dash/multiple">
+        <img src="{% static 'images/cmslogo.png' %}"  alt="cosmic-logo">
+         </a>
+         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+     <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Dashboard-Home<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            COSMIC-2
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#">Today</a></li>
+             <div class="dropdown-divider"></div>
+            <li><a class="dropdown-item" href="#">This Week</a></li>
+             <div class="dropdown-divider"></div>
+            <li><a class="dropdown-item" href="#">This Month</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#">Other Missions</a>
+        </li>
+      </ul>
+     </div>
+       </div> 
+       </nav> 
+
+     <body style="padding-top:75px;">
+       <div class="card p-4">
+         <h5 class="card-header bg-light text-center">Data Table Here</h5>
+       </div>
+       <div class="card p-4">
+         <h5 class="card-header bg-light text-center">Leaflet Map Here</h5>
+         <p class="card-footer bg-secondary text-white">updated 14 days ago.</p>
+       </div>
+         <div class="row">
+         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Cosmic 2 Occultation Counts All</h5>
+              <canvas id="occChart"></canvas>
+             <p class="card-footer bg-light text-right">updated 14 days ago.</p>
+         </div>
+        </div>
+       <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Cosmic 2 Occultation Counts by FM</h5>
+       <!--    <p class="card-footer bg-light text-warning text-right">updated 14 days ago.</p> --> 
+         </div>
+       </div>
+      </div>
+     </div>
+        <div class="row">
+         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+          <div class="card p-4">
+           <h5 class="card-header bg-light text-center">SNR L1 All</h5>
+           <canvas id="snrL1All"></canvas>
+           </div>
+     </div>        
+         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+         <div class="card p-4">
+          <h5 class="card-header bg-light text-center">SNR L1 By FM</h5>
+            <canvas id="snrL1byFM"></canvas>
+          </div>
+       </div>
+    </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">SNR L2 All (Real Live Data!!)</h5>
+            <canvas id="snrL2All"></canvas>
+         </div>
+        </div> 
+         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6"> 
+          <div class="card p-4">
+           <h5 class="card-header bg-light text-center">SNR L2 By FM</h5>
+            <canvas id="snrL2byFM"></canvas>
+         </div>
+       </div>
+      </div> 
+       <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6"> 
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">STDV All</h5>
+            <canvas id="stdvAll"></canvas> 
+        </div>
+       </div>
+          <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6"> 
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">STDV By FM</h5>
+            <canvas id="stdvAll"></canvas>
+         </div>
+      </div> 
+     </div>
+     <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6"> 
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Model Comp All</h5>
+         </div>
+       </div>
+          <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6"> 
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Model Comp By FM</h5>
+         </div>
+      </div> 
+     </div>
+        {% addtoblock "js" %}
+         <!--   <script type="text/javascript" src="{% static 'static_jquery/js/jquery.js' %}" /> -->
+         <!--  <script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script> -->
+          <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment@2.24.0"></script>
+          <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+          <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+          <script src="/data/{{ filename  }}.js"></script>        
+         <script  src="/data/bar_chart_test.js"></script>
+          <script src="/data/02-04-week-chartjs.js"></script>
+           <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chartjs-plugin-crosshair@1.1.4"></script> -->
+      {% endaddtoblock %}
+        </div>
+      {% addtoblock "js" %}
+        <script type="text/javascript">
+        var values_j = []; 
+        var labels_j = [];
+        var colors = [
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 99, 132, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ];
+        var background_colors= [
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+        ];
+        var set = occsbyFM ;
+        /* --------------------- COSMIC ChartJS Client ------------------------- *
+                           
+                               11/2019 Written by Adam Sunshine
+          --------------  Data Building functionality starts here! ----------------- */
+        var snrL2Labels =[];
+        var snr2GPS = [];
+        var snr2Glonass = [];
+        function build_bar_chart(bar_data){ 
+          snrL2Labels = bar_data[0][0];
+          console.log(snrL2Labels);
+          snr2GPS = bar_data[0][1];
+          snr2Glonass = bar_data[1][1];
+          console.log(snr2GPS);
+          console.log(snr2Glonass);
+         }
+        test = build_bar_chart(bar_data);
+        function build_data(occsdata){
+          return_obj = new Object;
+          key_arr = Object.keys(occsdata[0]);    //grab the keys from the first entry, assuming
+          key_arr.forEach(function(t){           // all data entries are consistent in length and order
+          return_obj[t]=[];
+          });                                    //turn the keys into a separate array for data plotting separation
+          occsdata.forEach(function(s){ 
+            let entry = Object.entries(s);       //turn object into iterable list
+            entry.forEach(function(i){
+             return_obj[i[0]].push(i[1]);
+            })
+          });                                      //take each list of data, set key and value dynamically based on entries  
+          //console.log(return_obj);
+          labels_j = return_obj.date;             //set labels as date and remove them from data
+          delete return_obj.date;
+          //console.log(return_obj);
+          var datasets = [];
+          let obj_list = Object.entries(return_obj); // turn new list of objects into valid chart js objects 
+          var c = 0;  
+          obj_list.forEach(function(r){
+            //console.log(r);
+            var one_display = { label: r[0],
+                                data: r[1],
+                                borderColor:colors[c],
+                                backgroundColor:background_colors[c]
+            };
+            c+=1;
+            datasets.push(one_display);
+          });                                     // use counter for dynamically grabbing color based on color array
+                                                  //  and pushing data from obj_list
+          return datasets;
+        } /* -------------------------- END OF BUILD_DATA ------------------------------------------ *
+
+                                         To Be Continued
+
+          -----------------------------------  UCAR COSMIC ------------------------------------------  */
+        var the_data = build_data(set); //call the function 
+        var dateLabel = [];
+        function getDate(item){
+          date_item = moment(item);
+          dateLabel.push(date_item);
+        }
+        labels_j.forEach(getDate);
+        console.log(dateLabel);
+        window.onload = function(){ 
+          var ctx = document.getElementById('occChart').getContext('2d');
+          var ctx2 = document.getElementById('stdvAll').getContext('2d');
+          var ctx3 = document.getElementById('snrL1All').getContext('2d');
+          var ctx4 = document.getElementById('snrL2All').getContext('2d');
+          //var ctx5 = document.getElementById('occBreakDownByFM').getContext('2d');
+          var chart = new Chart(ctx, {
+           // The type of chart we want to create
+            type: "line",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                  labels: dateLabel, 
+                   datasets: the_data
+                },
+                   // Configuration options go here
+                options: {
+                  plugins: {
+                    crosshair: {
+                      sync: {
+                        enabled: false
+                    },
+                    zoom: {
+                      enabled: true,                                      // enable zooming
+                      zoomboxBackgroundColor: 'rgba(66,133,244,0.2)',     // background color of zoom box 
+                      zoomboxBorderColor: '#48F',                         // border color of zoom box
+                      zoomButtonText: 'Reset Zoom',                       // reset zoom button text
+                      zoomButtonClass: 'reset-zoom',                      // reset zoom button class
+                    },
+                   callbacks: {
+                     beforeZoom: function(start, end) {                  // called before zoom, return false to prevent zoom
+                        return true;
+                     },
+                     afterZoom: function(start, end) {                   // called after zoom
+                           var the_data = build_data(set); 
+                           // console.log(the_data);
+                           chart.data.datasets = the_data;
+                           chart.update();
+                      }
+                   }
+                 }
+                  },
+                  hover: {
+                   intersect: false
+                  },
+                  tooltips: {
+                    mode: "interpolate",
+                    intersect: false,
+                  },
+                  scales: {
+                    xAxes: [{ 
+                      display: true,
+                      type: 'time',
+                      time: {
+                        unit: 'day'
+                        },
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'Date (Test)'
+               },
+ 
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Occultation Count' 
+                 },
+                     ticks: {
+                       min: 0,
+                       max: 1100
+                 }
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             },
+                title: {
+                  display: true,
+                  position: 'top',
+                  text: '{{ test_title }}',
+             }
+          }
+         });
+         var chart2 = new Chart(ctx2, {
+           // The type of chart we want to create
+            type: "bar",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                  labels: [
+            0.0625, 
+            0.3125, 
+            0.5625, 
+            0.8125, 
+            1.0625, 
+            1.3125, 
+            1.5625, 
+            1.8125, 
+            2.0625, 
+            2.3125, 
+            2.5625, 
+            2.8125
+            ], 
+                   datasets: [{ label: "GPS", data:
+           [0.12337217272104181, 18.00548320767649, 33.351610692254965, 18.677176148046605,
+            10.253598355037697, 5.517477724468814, 3.762851267991775, 2.3783413296778617, 1.562714187799863,
+            1.13776559287183, 0.8567511994516792, 0.5551747772446882],
+              borderColor: 'rgba(54, 162, 235, 1)',
+              backgroundColor: 'rgba(54, 162, 235, 0.5)', },{
+                            label: "Glonass", data:
+              [0.0, 1.3329979879275655, 7.281187122736418, 14.361167002012074, 15.417505030181086, 15.404929577464788, 12.877263581488934, 9.343561368209254, 6.753018108651912, 4.426559356136821, 3.4079476861167004, 2.251006036217304],
+           borderColor: 'rgba(75, 192, 192, 1)',
+           backgroundColor: 'rgba(75, 192, 192, 0.5)', 
+                  }]
+                },
+                   // Configuration options go here
+                options: {
+                  scales: {
+                    xAxes: [{ 
+                     display: true,
+                      type: 'category',
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'STDV (microrads)'
+               }, ticks: {
+                   min: 0,
+                   max: 4,
+                   stepSize: 0.25, 
+                   display: true
+               } 
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Percent %' 
+                 },
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             },
+                title: {
+                  display: true,
+                  position: 'top',
+                  text: 'STDV for Bending Angle RO',
+             }
+          }
+         });
+        var chart3 = new Chart(ctx3, {
+           // The type of chart we want to create
+            type: "bar",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                  labels: [25.0, 125.0, 225.0, 325.0, 425.0, 525.0, 625.0, 725.0, 825.0, 925.0, 1025.0, 1125.0, 1225.0, 1325.0, 1425.0, 1525.0, 1625.0, 1725.0, 1825.0, 1925.0, 2025.0, 2125.0, 2225.0, 2325.0, 2425.0], 
+                   datasets: [{ label: "GPS", data:
+           [0.0, 0.0, 0.13277145990879177, 0.3809963632165329, 0.7850834151128557, 1.2238065000288634, 2.193615424580038, 3.001789528372684, 3.573284073197483, 3.9369624199041735, 4.6470010968077125, 5.287767707671881, 6.765571783178433, 8.87259712520926, 9.73849795070138, 9.455637014373954, 8.762916353980257, 6.551982912890376, 5.501356577959938, 4.283322750101022, 3.4751486463083765, 2.845927379784102, 2.6438838538359404, 2.5630664434566763, 2.083934653351036],
+              borderColor: 'rgba(54, 162, 235, 1)',
+              backgroundColor: 'rgba(54, 162, 235, 0.5)', },{
+                            label: "Glonass", data:
+           [0.0, 0.0, 1.2811011116993116, 1.9163578613022765, 2.8586553732133404, 4.542085759661196, 4.859714134462679, 4.7856008470089995, 4.690312334568555, 5.2302805717310745, 5.346744309158285, 6.225516146109053, 5.706723133933298, 5.854949708840657, 5.727898358920064, 5.526733721545791, 5.611434621492854, 5.950238221281101, 6.574907358390683, 5.8443620963472735, 4.976177871889889, 3.748014822657491, 1.8740074113287455, 0.7093700370566437, 0.14822657490735838],
+           borderColor: 'rgba(75, 192, 192, 1)',
+           backgroundColor: 'rgba(75, 192, 192, 0.5)', 
+                  }]
+                },
+                   // Configuration options go here
+                options: {
+                  scales: {
+                    xAxes: [{ 
+                     display: true,
+                      type: 'category',
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'V/V'
+               }
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Percent %' 
+                 },
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             },
+                title: {
+                  display: true,
+                  position: 'top',
+                  text: 'CDAAC Good QC Neutral Atm SNR Ave L1',
+             }
+          }
+         });
+        var chart4 = new Chart(ctx4, {
+           // The type of chart we want to create
+            type: "bar",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                  labels:  snrL2Labels,
+                  datasets: [{ label: "GPS", data: snr2GPS,
+              borderColor: 'rgba(54, 162, 235, 1)',
+              backgroundColor: 'rgba(54, 162, 235, 0.5)', },
+              {
+                           label: "Glonass", data: snr2Glonass,
+           borderColor: 'rgba(75, 192, 192, 1)',
+           backgroundColor: 'rgba(75, 192, 192, 0.5)', 
+                  }]
+                },
+                   // Configuration options go here
+                options: {
+                  scales: {
+                    xAxes: [{ 
+                     display: true,
+                      type: 'category',
+                      scaleLabel: {
+                        display: true,
+                        labelString: ' V/V'
+               }
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Percent %' 
+                 },
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             },
+                title: {
+                  display: true,
+                  position: 'top',
+                  text: 'CDAAC Good QC neutral Atm Occ SNR Ave L2',
+             }
+          }
+         });
+
+       };
+      </script>
+      {% endaddtoblock %}
+      {% render_block "js" %}
+    </body>
+</html>

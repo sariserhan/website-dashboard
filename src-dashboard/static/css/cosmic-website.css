@@ -1,0 +1,476 @@
+
+//Copied over from the cosmic Website (https://cosmic.ucar.edu) for styling assistance
+
+// - Adam Sunshine
+
+body {
+	/*background: url(https://source.unsplash.com/yZygONrUBe8);
+ *  * 	background-size: cover;
+ *   * 		background-position: center;
+ *    * 			background-repeat: no-repeat;*/
+	font-family: 'Poppins', sans-serif;
+	/*background-color: #f8f8f8;*/
+	background-color: #edf0f4;
+        font-size: 18px;
+
+}
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+
+.intro-area {
+    padding-top: 10px; /* Also 50px of padding in other pages so navbar doesn't overlap content */
+    padding-bottom: 50px;
+    text-align: center;
+    color: #f8f8f8;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    height: 1000px;
+    -webkit-animation: fadein 4s; /* Safari and Chrome */
+    -moz-animation: fadein 4s; /* Firefox */
+    -ms-animation: fadein 4s; /* Internet Explorer */
+    -o-animation: fadein 4s; /* Opera */
+    animation: fadein 4s;
+}
+
+      @keyframes fadein {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        /* Firefox */
+        @-moz-keyframes fadein {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        /* Safari and Chrome */
+        @-webkit-keyframes fadein {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        /* Internet Explorer */
+        @-ms-keyframes fadein {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        /* Opera */
+        @-o-keyframes fadein {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+
+
+.breadcrumb-area {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.subintro-area {
+    padding-top: 80px; /* Also 50px of padding in other pages so navbar doesn't overlap content */
+    padding-bottom: 150px;
+}
+
+.title {
+	color: #e88904;
+	/*color: #e8370b;*/
+	/*color: #302e2a;*/
+	text-transform: uppercase;
+	font-weight: 700;
+	font-size: 1.5em;
+	letter-spacing: 3px;
+}
+
+.subtitle {
+	color: #ffffff;
+	/*color: #d4c7c7;*/
+	text-transform: uppercase;
+	font-eight: 700;
+	font-size: 1em;
+	letter-spacing: 3px;
+}
+
+#content {
+	text-align: center;
+	padding-top: 25%;
+	font-weight: 700;
+	text-shadow: 0px 4px 3px rgba(0,0,0,0.4),
+				 0px 8px 13px rgba(0,0,0,0.1),
+				 0px 18px 23px rgba(0,0,0,0.1);
+
+}
+
+.top-buffer { margin-top:30px; }
+
+
+h1, h2, h3, h4, h5, h6, {
+	font-weight: 700;
+	font-family: 'Poppins', sans-serif;
+}
+
+p, li {
+	font-weight: 400;
+	font-size: 17px;
+}
+
+.center {
+    display: block;
+    margin: 0 auto;
+}
+
+
+.navbar-brand {
+  padding: 0px;
+  /*Comment out if you want to make smaller*/
+  height: 80px;
+}
+
+.navbar-brand>img {
+  height: 100%;
+  padding: 7px 15px;
+  width: auto;
+}
+
+/*navbar logo resize for smaller width screen (mobile) */
+@media screen and (max-width: 509px){
+.navbar-brand>img {
+  width: 400px;
+  height: auto;
+}
+}
+@media screen and (max-width: 459px){
+.navbar-brand>img {
+  width: 350px;
+  height: auto;
+}
+}
+@media screen and (max-width:409px){
+.navbar-brand>img{
+  width: 300px;
+  height: auto;
+}
+}
+@media screen and (max-width:359px){
+.navbar-brand>img{
+  width: 275px;
+  height: auto;
+}
+}
+
+/*Comment out if you want to make smaller*/
+.nav >li >a {
+  padding-top: 30px;
+  padding-bottom: 30px;
+  /*font-size: 15px;*/
+  font-size: 17px
+  /*font-weight: 700;*/
+  font-weight: 1200
+}
+
+/*Comment out if you want to make smaller*/
+.navbar-toggle {
+  padding: 10px;
+  margin: 25px 15px 25px 0;
+}
+
+
+
+/* Navbar */
+/* From https://work.smarchal.com/twbscolor/css/e74c3cc0392becf0f1ffbbbc0 */
+
+.navbar-default {
+  background-color: #edf0f4;
+  border-color: #edf0f4;
+  border-bottom: 1px solid #e7e7e7;
+}
+.navbar-default .navbar-brand {
+  /*color: #d4c7c7;*/
+  color: #5e626e;
+}
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+  /*color: #ffffff;*/
+  color: #494746;
+}
+.navbar-default .navbar-text {
+	/*color: #d4c7c7;*/
+    color: #5e626e;
+}
+.navbar-default .navbar-nav > li > a {
+	/*color: #d4c7c7;*/
+    color: #5e626e;
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+	/*color: #ffffff;*/
+    color: #494746;
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+	color: #7f828a;
+    /*color: #d4c7c7;*/
+    background-color: #DBE2E9;
+    /*background-color: #494746;*/
+}
+.navbar-default .navbar-nav > .ancestor > a,
+.navbar-default .navbar-nav > .ancestor > a:hover,
+.navbar-default .navbar-nav > .ancestor > a:focus {
+	color: #7f828a;
+    /*color: #d4c7c7;*/
+    background-color: #DBE2E9;
+    /*background-color: #494746;*/
+}
+
+
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+	color: #7f828a;
+    /*color: #d4c7c7;*/
+    background-color: #DBE2E9;
+    /*background-color: #494746;*/
+}
+.navbar-default .navbar-toggle {
+  border-color: #494746;
+}
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+	background-color: #DBE2E9;
+    /*background-color: #494746;*/
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #d4c7c7;
+}
+.navbar-default .navbar-collapse,
+.navbar-default .navbar-form {
+  border-color: #d4c7c7;
+}
+.navbar-default .navbar-link {
+  color: #d4c7c7;
+}
+.navbar-default .navbar-link:hover {
+	/*color: #ffffff;*/
+    color: #494746;
+}
+
+@media (max-width: 767px) {
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: #d4c7c7;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+	  /*color: #ffffff;*/
+      color: #494746;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+	  color: #7f828a;
+      /*color: #d4c7c7;*/
+      background-color: #DBE2E9;
+      /*background-color: #494746;*/
+  }
+}
+
+/* Dropdown menu background color*/
+
+/* .navbar-nav > li > .dropdown-menu {  background-color: #565959; }*/
+.navbar-nav > li > .dropdown-menu { background-color: #edf0f4;}
+
+
+/* Dropdown menu font color****/
+
+ .navbar-nav > li > .dropdown-menu a{   color: #7f828a;  }
+ /*color: #d4c7c7;*/
+
+
+ .navbar-nav > li > .dropdown-menu > .active > a,
+ .navbar-nav > li > .dropdown-menu > .active > a:hover,
+ .navbar-nav li > .dropdown-menu > .active > a:focus {
+	 color: #7f828a;
+	 /*color: #d4c7c7;*/
+	 background-color: #DBE2E9;
+	 /*background-color: #494746;*/
+  }
+
+
+ .dropdown-menu > li > a {
+    /*font-size: 15px;*/
+	font-size: 17px
+	/*font-weight: 700;*/
+    font-weight: 1200
+ }
+
+/*Dropdown menus!!*/
+
+/* Dropdown menu font color*/
+
+
+.dropdown-menu > li > a:hover {
+    /*background-color: #565959;*/
+	background-color: #edf0f4;
+	/*color: #ffffff;*/
+    color: #000000;
+}
+
+ .dropdown-menu > li > .active > a,
+ .dropdown-menu > li > .active > a:hover,
+ .dropdown-menu > li > .active > a:focus {
+	 color: #7f828a;
+	 /*color: #d4c7c7;*/
+	 background-color: #DBE2E9;
+	 /*background-color: #494746;*/
+ }
+
+/* Sub dropdown menus */
+ul.nav li.dropdown:hover ul.dropdown-menu{
+    /*display: block; */
+    /*background-color: #565959; */
+	background-color: #edf0f4;
+}
+
+/* Sub dropdown menus if ancestor */
+ul.nav li.dropdown:hover ul.dropdown-menu  li.ancestor.dropdown  > a {
+	color: #7f828a;
+	/*color: #d4c7c7;*/
+	background-color: #DBE2E9;
+	/*background-color: #494746;*/
+}
+
+/* Sub dropdown menus if active */
+ul.nav li.dropdown:hover ul.dropdown-menu  li.active > a {
+	color: #7f828a;
+	/*color: #d4c7c7;*/
+	background-color: #DBE2E9;
+	/*background-color: #494746;*/
+}
+
+
+.navbar .dropdown-menu {
+ margin-top: 0px;
+}
+
+
+.ruler-divider {
+	width: 400px;
+	border-top: 1px solid #f8f8f8;
+	border-bottom: 1px solid rgba(0.0.0.0.2);
+}
+
+.content-one {
+    padding: 50px 0;
+    background-color: #f8f8f8;
+}
+
+.content-two {
+    padding: 50px 0;
+    border-top: 1px solid #e7e7e7;
+    border-bottom: 1px solid #e7e7e7;
+}
+
+.section-title{
+    margin-bottom: 30px;
+
+}
+
+.helper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+/*No more custom - from langing-page.css*/
+.banner {
+    padding: 40px 0;
+    background-color: #ffffff;
+    background-size: cover;
+}
+
+footer {
+    padding: 50px 0;
+    background-color: #f8f8f8;
+}
+
+p.copyright {
+    margin: 15px 0 0;
+}
+
+
+.btn-circle {
+  width: 70px;
+  height: 70px;
+  margin-top: 15px;
+  padding: 7px 16px;
+  border: 2px solid white;
+  border-radius: 100% !important;
+  font-size: 40px;
+  color: white;
+  background: transparent;
+  -webkit-transition: background 0.3s ease-in-out;
+  -moz-transition: background 0.3s ease-in-out;
+  transition: background 0.3s ease-in-out;
+}
+.btn-circle:hover,
+.btn-circle:focus {
+  outline: none;
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+}
+.btn-circle i.animated {
+  -webkit-transition-property: -webkit-transform;
+  -webkit-transition-duration: 1s;
+  -moz-transition-property: -moz-transform;
+  -moz-transition-duration: 1s;
+}
+.btn-circle:hover i.animated {
+  -webkit-animation-name: pulse;
+  -moz-animation-name: pulse;
+  -webkit-animation-duration: 1.5s;
+  -moz-animation-duration: 1.5s;
+  -webkit-animation-iteration-count: infinite;
+  -moz-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+  -moz-animation-timing-function: linear;
+}
+
+.breadcrumb {
+	background-color:#edf0f4;
+	margin-bottom: 20px;
+}
+
+TABLE.decor {
+  display: table;
+  border-collapse: collapse;
+  border-spacing: 5px;
+  border-style: solid;
+  border-width: 10px;
+  border-color: #cbd4e7;
+  -moz-box-sizing: border-box;
+}
+
+TABLE TR.decor-hdr  {
+  background-color:#8baff8;
+  color: white;
+  font-size: 9pt;
+  font-weight: normal;
+}
+
+  TR.decor-line  {
+  border-color: #ccd;
+  border-style: dashed;
+  border-width: 0px 0px 1px 0px;
+  margin: 0;
+  padding: 0;
+}
+
+
+TD {font-family: 'Poppins', sans-serif; font-size:12px; padding: 8px; left:100; top:20; text-align:left}
+TH {font-family: 'Poppins', sans-serif; font-size:14px; padding: 8px; left:100; top:20; font-weight: bold}
+

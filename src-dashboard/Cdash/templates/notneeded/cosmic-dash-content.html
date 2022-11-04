@@ -1,0 +1,321 @@
+ {% extends "dashboard-base.html" %}     
+
+   {% block content %}
+      <div class="card p-4">
+         <h5 class="card-header bg-light text-center">Data Table Here</h5>
+       </div>
+       <div class="card p-4">
+         <h5 class="card-header bg-light text-center">Leaflet Map Here</h5>
+         <p class="card-footer bg-secondary text-white">updated 14 days ago.</p>
+       </div>
+         <div class="row">
+         <div class="col-sm-12 col-md-12 col-lg-6">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Cosmic 2 Occultation Counts</h5>
+              <canvas id="myChart"></canvas>
+             <p class="card-footer bg-light text-right">updated 14 days ago.</p>
+         </div>
+        </div>
+       <div class="col-sm-12 col-md-12 col-lg-6">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Sample Data goes Here</h5>
+       <!--    <p class="card-footer bg-light text-warning text-right">updated 14 days ago.</p> -->
+           <canvas id="stdvChart"></canvas> 
+         </div>
+       </div>
+      </div>
+     </div>
+        <div class="row" style="height:300px;">
+         <div class="col-sm-12 col-md-12 col-lg-6">
+          <div class="card p-4">
+           <h5 class="card-header bg-light text-center">High SNR L1</h5>
+         </div>
+     </div>        
+         <div class="col-sm-12 col-md-12 col-lg-6">
+         <div class="card p-4">
+          <h5 class="card-header bg-light text-center">High SNR L2</h5>
+         </div>
+       </div>
+    </div>
+        <div class="card-deck" style="height:300px;">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">STDV Histograms</h5>
+         </div>
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Histograms PT 2</h5>
+         </div>
+       </div>
+       <div class="card-deck" style="height:300px;">
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">Model Comparisons</h5>
+         </div>
+         <div class="card p-4">
+           <h5 class="card-header bg-light text-center">More Comparisons</h5>
+         </div>
+       </div>
+          {% addtoblock "js" %}
+         <!--   <script type="text/javascript" src="{% static 'static_jquery/js/jquery.js' %}" /> -->
+         <!--  <script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script> -->
+          <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment@2.24.0"></script>
+          <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+          <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+          <script src="/data/{{ filename  }}.js"></script>        
+         <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chartjs-plugin-crosshair@1.1.4"></script> -->
+      {% endaddtoblock %}
+        </div>
+      {% addtoblock "js" %}
+        <script type="text/javascript">
+        var values_j = []; 
+        var labels_j = [];
+        var colors = [
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 99, 132, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ];
+        var background_colors= [
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+        ];
+        var set = occsC3;
+        /* --------------------- COSMIC ChartJS Client ------------------------- *
+                           
+                               11/2019 Written by Adam Sunshine
+          --------------  Data Building functionality starts here! ----------------- */
+
+        function build_data(occsdata){
+          return_obj = new Object;
+          key_arr = Object.keys(occsdata[0]);    //grab the keys from the first entry, assuming
+          key_arr.forEach(function(t){           // all data entries are consistent in length and order
+          return_obj[t]=[];
+          });                                    //turn the keys into a separate array for data plotting separation
+          occsdata.forEach(function(s){ 
+            let entry = Object.entries(s);       //turn object into iterable list
+            entry.forEach(function(i){
+             return_obj[i[0]].push(i[1]);
+            })
+          });                                      //take each list of data, set key and value dynamically based on entries  
+          //console.log(return_obj);
+          labels_j = return_obj.date;             //set labels as date and remove them from data
+          delete return_obj.date;
+          //console.log(return_obj);
+          var datasets = [];
+          let obj_list = Object.entries(return_obj); // turn new list of objects into valid chart js objects 
+          var c = 0;  
+          obj_list.forEach(function(r){
+            //console.log(r);
+            var one_display = { label: r[0],
+                                data: r[1],
+                                borderColor:colors[c],
+                                backgroundColor:background_colors[c]
+            };
+            c+=1;
+            datasets.push(one_display);
+          });                                     // use counter for dynamically grabbing color based on color array
+                                                  //  and pushing data from obj_list
+          return datasets;
+        } /* -------------------------- END OF BUILD_DATA ------------------------------------------ *
+
+                                         To Be Continued
+
+          -----------------------------------  UCAR COSMIC ------------------------------------------  */
+        var the_data = build_data(set); //call the function 
+        var dateLabel = [];
+        function getDate(item){
+          date_item = moment(item);
+          dateLabel.push(date_item);
+        }
+        labels_j.forEach(getDate);
+        console.log(dateLabel);
+        window.onload = function(){ 
+          var ctx = document.getElementById('myChart').getContext('2d');
+          var ctx2 = document.getElementById('stdvChart').getContext('2d');
+          var chart = new Chart(ctx, {
+           // The type of chart we want to create
+            type: "line",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                  labels: dateLabel, 
+                   datasets: the_data
+                },
+                   // Configuration options go here
+                options: {
+                  plugins: {
+                    crosshair: {
+                      sync: {
+                        enabled: false
+                    },
+                    zoom: {
+                      enabled: true,                                      // enable zooming
+                      zoomboxBackgroundColor: 'rgba(66,133,244,0.2)',     // background color of zoom box 
+                      zoomboxBorderColor: '#48F',                         // border color of zoom box
+                      zoomButtonText: 'Reset Zoom',                       // reset zoom button text
+                      zoomButtonClass: 'reset-zoom',                      // reset zoom button class
+                    },
+                   callbacks: {
+                     beforeZoom: function(start, end) {                  // called before zoom, return false to prevent zoom
+                        return true;
+                     },
+                     afterZoom: function(start, end) {                   // called after zoom
+                           var the_data = build_data(set); 
+                           // console.log(the_data);
+                           chart.data.datasets = the_data;
+                           chart.update();
+                      }
+                   }
+                 }
+                  },
+                  hover: {
+                   intersect: false
+                  },
+                  tooltips: {
+                    mode: "interpolate",
+                    intersect: false,
+                  },
+                  scales: {
+                    xAxes: [{ 
+                      display: true,
+                      type: 'time',
+                      time: {
+                        unit: 'day'
+                        },
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'Date (Test)'
+               },
+ 
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Occultation Count' 
+                 },
+                     ticks: {
+                       min: 0,
+                       max: 1000
+                 }
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             },
+                title: {
+                  display: true,
+                  position: 'top',
+                  text: '{{ test_title }}',
+             }
+          }
+         });
+         var chart2 = new Chart(ctx2, {
+           // The type of chart we want to create
+            type: "bar",
+           // The data for our dataset
+            responsive: true,                                       // testing responsive option 
+              data: {
+                  labels: [
+            0.0625, 
+            0.3125, 
+            0.5625, 
+            0.8125, 
+            1.0625, 
+            1.3125, 
+            1.5625, 
+            1.8125, 
+            2.0625, 
+            2.3125, 
+            2.5625, 
+            2.8125
+            ], 
+                   datasets: [{ label: "GPS", data: [
+            0.1480384900074019,
+            20.68837897853442,
+            33.863804589193194,
+            17.764618800888233,
+            8.512213175425611,
+            4.996299037749815,
+            3.774981495188749,
+            2.553663952627683,
+            1.7024426350851223,
+            1.1843079200592153,
+            0.7031828275351591,
+            0.4071058475203553
+           ], borderColor: 'rgba(54, 162, 235, 1)',
+              backgroundColor: 'rgba(54, 162, 235, 0.2)', },{
+                            label: "Glonass", data: [
+            0.0725163161711385,
+            1.305293691080493,
+            9.282088469905728,
+            13.270485859318345,
+            16.17113850616389,
+            15.373459028281363,
+            10.877447425670777,
+            8.992023205221175,
+            5.946337926033358,
+            5.003625815808557,
+            3.40826686004351,
+            1.4503263234227701
+        ], borderColor: 'rgba(75, 192, 192, 1)',
+           backgroundColor: 'rgba(75, 192, 192, 0.2)', 
+                  }]
+                },
+                   // Configuration options go here
+                options: {
+                  scales: {
+                    xAxes: [{ 
+                     display: true,
+                      type: 'category',
+                      scaleLabel: {
+                        display: true,
+                        labelString: 'STDV (microrads)'
+               }, ticks: {
+                   min: 0,
+                   max: 4,
+                   stepSize: 0.25, 
+                   display: true
+               } 
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         labelString: 'Percent %' 
+                 },
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 18,
+                    boxWidth: 30
+               }
+             },
+                title: {
+                  display: true,
+                  position: 'top',
+                  text: '',
+             }
+          }
+         });
+       };
+      </script>
+      {% endaddtoblock %}
+      {% render_block "js" %}
+  {% endblock %}

@@ -1,0 +1,54 @@
+
+var pathID = "/data/galleryPlayground/allClear/";
+
+
+/* All Clear Images */
+
+
+var galleryConfig1 = {
+  
+  "group1": {
+    "captions": [
+      "15 mins ago, " ,
+      "30 mins ago, " ,
+      "45 mins ago, " ,
+      "60 mins ago, " ,
+      "75 mins ago, " ,
+      "90 mins ago, " ,
+    ],
+    "header": "Past 90 Minutes",
+    "images": [
+      "dev-area/productMap_latest01.png",
+      "dev-area/productMap_latest02.png",
+      "dev-area/productMap_latest03.png", 
+      "dev-area/productMap_latest04.png",
+      "dev-area/productMap_latest05.png",
+      "dev-area/productMap_latest06.png",
+    ],
+    "numCol": 6,
+    "title": "All Clear | Realtime Display "
+  }, 
+    "group2": {
+    "captions": [
+      "4 hours ago, " ,
+      "8 hours ago, " ,
+      "12 hours ago, " ,
+      "16 hours ago, " ,
+      "20 hours ago, " ,
+      "24 hours ago, " ,
+    ],
+    "header": "Past 24 Hours",
+    "images": [
+      "dev-area/productMap_latest07.png",
+      "dev-area/productMap_latest08.png",
+      "dev-area/productMap_latest09.png",
+      "dev-area/productMap_latest10.png",
+      "dev-area/productMap_latest11.png",
+      "dev-area/productMap_latest12.png",
+    ],
+    "numCol": 6,
+    "title": "All Clear | Realtime Display"
+  },
+};
+
+

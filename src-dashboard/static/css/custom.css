@@ -1,0 +1,112 @@
+.navbar-nav li:hover > ul.dropdown-menu {
+    display: block;
+}
+
+//custom css styling for Leaflet Map - copied over from index.html - Adam
+body > div.container {
+    position: fixed;
+    position: fixed;
+    top: calc(50px);
+    bottom: calc(5px);
+    right: 0;
+    left: 0;
+    vertical-align: top;
+  }
+/*
+  nav {
+    position: fixed;
+    height: 56px;
+    top: 0;
+    right: 0;
+    left: 0;
+    background: #4286f4;
+  }
+*/
+  body {
+    padding: 0;
+    margin: 0;
+  }
+
+  html, body{
+    height: 100%;
+    width: 100%;
+  }
+
+  #mapid {
+    border: 1px solid #454545;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    height: 100%;
+    width: 100%;
+  }
+
+  .info {
+    padding: 10px 18px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    background: white;
+    background: rgba(255,255,255,0.9);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+   }
+
+  .legend {
+    line-height: 25px;
+    color: #555;
+  }
+
+  .legend i {
+    float: left;
+    border-radius: 50%;
+    margin-right: 8px;
+    opacity: 0.8;
+  }
+.leaflet-container .leaflet-control-mouseposition {
+    font: 11px/12px Arial, Helvetica, sans-serif;
+//            background-color: rgba(255, 255, 255, 0.7);
+//            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+//            padding: 10px 18px;
+//            border-radius: 5px;
+//            color: #0c0d5a;
+//            margin-right: 20px;
+  }
+
+  .leaflet-control-layers-toggle:after{
+//           content:""; 
+//           color:#55149e;
+//           font-weight: bold;
+//           font-size: 14px;
+  }
+
+  .leaflet-control-layers-toggle{
+//           line-height:25px;
+//           width:auto;
+//           background-position:30px 50% ;
+//           padding:20px;
+//           padding-left:40px;
+//           padding-right: 40px;
+//           text-decoration:none;
+  }
+
+  .leaflet-control-layers-expanded {
+    font-weight: bold;
+    font-size: 14px;
+//            width:auto;
+//            color: #55149e;
+//            background-color: #2da0e2;
+//            padding:9px;
+//            padding-left:30px;
+//            text-decoration:none;
+//            line-height:25px;
+  }
+
+  .leaflet-right .leaflet-control {
+    margin-right: 20px;
+  }
+
+  span {
+    padding:15px;
+  }
+
+  input[type="checkbox"] {
+    left: 2px
+  }

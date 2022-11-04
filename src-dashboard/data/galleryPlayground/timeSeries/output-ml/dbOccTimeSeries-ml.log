@@ -1,0 +1,22 @@
+dbOccTimeSeries.py started at 2022-07-28 01:25:03 UTC
+
+Date range: 2022-06-27 to 2022-07-27
+
+Querying host leo-a-ml
+  Mission coseqrt
+  Mission geooptert
+  Mission kompsat5rt
+  Mission pazrt
+  Mission spireert
+
+Querying host leo-stage-ml
+  Mission coseqrt
+  Mission geooptert
+  Mission kompsat5rt
+  Mission pazrt
+  Mission spireert
+
+Making figures
+
+dbOccTimeSeries.py done at 2022-07-28 01:28:02 UTC (elapsed time 179 sec)
+

@@ -1,0 +1,111 @@
+{% load cms_tags sekizai_tags %}
+{% load staticfiles %}
+<html>
+    <head>
+      {% render_block "css" %}  
+      <title>Sunshine-Dashboard UCAR demo</title>
+        <!--[if lte IE 8]>
+            <script src="{% static 'js/excanvas.js' %}"></script>
+        <![endif]-->
+    </head>
+    {% cms_toolbar  %}
+    <body>
+        <div style="width:75%;">
+        <canvas id="myChart"></canvas>
+        {% addtoblock "js" %}
+       <!--   <script type="text/javascript" src="{% static 'static_jquery/js/jquery.js' %}" /> -->
+        <!--  <script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script> -->
+          <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+          <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <!--   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chartjs-plugin-crosshair@1.1.2"></script> -->
+          <script src="/data/occsAtmC2.js"></script>        
+      {% endaddtoblock %}
+        </div>
+      {% addtoblock "js" %}
+        <script type="text/javascript">
+        var values_j = []; 
+        var labels_j = [];
+        var set = occsC3;      
+        set.forEach(function(s) {
+          labels_j.push(s.date);
+          values_j.push(s.atm_count);
+         });
+        console.log("labels ", labels_j);
+        console.log("values ", values_j);
+        var colors = {
+          'blue' : 'rgba(54, 162, 235, 1)',
+          'red' : 'rgba(255, 99, 132, 1)',
+          'green' : 'rgba(75, 192, 192, 1)',
+          'yellow' : 'rgba(255, 206, 86, 1)',
+          'purple' : 'rgba(153, 102, 255, 1)',
+          'orange' : 'rgba(255, 159, 64, 1)'
+        };
+        var background_colors= {
+          'blue' : 'rgba(54, 162, 235, 0.2)',
+          'red' : 'rgba(255, 99, 132, 0.2)',
+          'green' : 'rgba(75, 192, 192, 0.2)',
+          'yellow' : 'rgba(255, 206, 86, 0.2)',
+          'purple' : 'rgba(153, 102, 255, 0.2)',
+          'orange' : 'rgba(255, 159, 64, 0.2)'
+        };
+        var border_color = colors['{{ color }}'];
+        var background_color = background_colors['{{ color }}'];
+        window.onload = function(){ 
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var chart = new Chart(ctx, {
+           // The type of chart we want to create
+            type: 'line',
+           // The data for our dataset
+            data: {
+                  labels: labels_j, 
+                   datasets: [{
+                     label: 'COSMIC-2 Daily Occultation Count',
+                        backgroundColor: background_color, 
+                         borderColor: border_color,
+                        data: values_j,
+                  }]
+                },
+                   // Configuration options go here
+                options: {
+                  scales: {
+                    xAxes: [{ 
+                      display: true,
+                      scaleLabel: {
+                        display: true,
+                        fontSize: 28,
+                        labelString: 'Date (YYYY-MM-DD)'
+               },
+ 
+              }],
+                    yAxes: [{
+                      display: true,
+                      scaleLabel: {
+                         display: true,
+                         fontSize: 30,
+                         labelString: 'Occultation Count' 
+                 }
+               }]
+             },
+                legend: {
+                  display: true,
+                  position: 'top',
+                  align: 'center',
+                  labels: {
+                    fontSize: 22,
+                    boxWidth: 40
+               }
+             },
+                title: {
+                  display: true,
+                  position: 'top',
+                  fontSize: 30,
+                  text: '{{ test_title }}',
+             }
+          }
+         });
+        };
+      </script>
+      {% endaddtoblock %}
+      {% render_block "js" %}
+    </body>
+</html>

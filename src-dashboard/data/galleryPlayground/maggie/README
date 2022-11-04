@@ -1,0 +1,163 @@
+hello there! Welcome to the COSMIC Slide Playground.
+
+Steps to get up and running:
+**ADAM DOES THESE***
+1. Adam creates new template page, url entry, view entry for new user.
+	specify path to data, title, path to JSON object config.
+2. Adam creates new data directory with at least a few sample images under /data/galleryPlayground/{YOUR USER DIR HERE}.
+3. Adam pushes new changes.
+
+As user Webops:
+4. Adam pulls in the updated web dashboard code with new user info as Webops.
+5. Make sure all dirs involved here have 775 permissions! and 664 for images/JS files. even after git Clone we need to change permissions again.
+6. Adam copies over config1.js file from existing user for base config file for new user.
+
+***ADAM DONE WITH STEPS***
+
+
+Time to add some user images! 
+
+On monproc-dev: 
+
+*start*
+
+- ssh monproc-dev.cosmic.ucar.edu
+
+As your own user,
+Once in monproc-dev:
+  Use gnssProc repo to generate plots via:
+  - cd {path to your locally cloned GNSS proc repo}
+  - cd gnssProc/
+  - source env/envfile
+  - cd c2Monitors/bin/
+  run a test command, i.e.:
+    - dbOccSummary.py -dbhost leo-stage-ml1 -d1 -1 -d2 -1 -m coseqrt -chartjs
+    this should generate some plots and  chartJS files.  
+
+Now, let's transfer some images over from monproc-dev to monweb-dev.
+
+on monproc-dev, in same directory you just ran the dbOccSummary command,
+                or in the directory where images live that you want to transfer over, run:
+  -  scp {images you want to copy over} {your user}@monweb-dev.cosmic.ucar.edu:/opt/tools/django/web-dashboard/src-dashboard/data/galleryPlayground/{Your User Dir Here}/.
+  This will ask for Duo password, enter, and selected images should be transferred over to monweb-dev!
+
+Back to monweb-dev!
+cd to the path where your new config gallery lives:
+  - ssh monweb-dev.cosmic.ucar.edu
+  - cd /opt/tools/django/web-dashboard/src-dashboard/data/galleryPlayground/{Your User Dir Here}/.
+  your new images should be here:
+  -  ls -lah
+  should show all images located in this directory, as well as the config file.
+
+check changing permissions on the newly transferred images:
+  - chmod 664 {name of new images}
+
+If you want subdirectories in this directory, do:
+  - mkdir {Name of new directory}
+  - chmod 775 {name of new directory}/
+  - cp {selected images} {name of new directory}/.
+  - chmod 664 {name of new directory}/*
+Now, edit the layout!
+
+your config1.js file looks like this:
+
+- vi config1.js
+
+var pathID = "/data/galleryPlayground/{your user dir here}/";
+
+var galleryConfig1 = {
+  "group1": {
+    "captions": [
+      "Maggie test All, past 24 hours",
+      "SNR L1  user sunshine can edit? FM1, past 24 hours",
+      "SNR L1 FM2, past 24 hours",
+      "SNR L1 FM3, past 24 hours",
+      "SNR L1 FM5, past 24 hours",
+      "SNR L1 FM6, past 24 hours"
+    ],
+    "header": "SNR by FM in units of V/V",
+    "images": [
+      "neutral_atm_snrAveL1_leo-stage-ml1_coseqrt_2021-02-16_to_2021-02-16_all.png",
+      "neutral_atm_snrAveL1_leo-stage-ml1_coseqrt_2021-02-16_to_2021-02-16_fm01.png",
+      "neutral_atm_snrAveL1_leo-stage-ml1_coseqrt_2021-02-16_to_2021-02-16_fm02.png",
+      "neutral_atm_snrAveL1_leo-stage-ml1_coseqrt_2021-02-16_to_2021-02-16_fm03.png",
+      "neutral_atm_snrAveL1_leo-stage-ml1_coseqrt_2021-02-16_to_2021-02-16_fm05.png",
+      "neutral_atm_snrAveL1_leo-stage-ml1_coseqrt_2021-02-16_to_2021-02-16_fm06.png"
+    ],
+    "numCol": 6,
+    "title": "COSMIC-2 SNR L1 | Past 24 Hours"
+  },
+  "group2": {
+    "captions": [
+      "SNR L2 ALL, past 24 hours",
+      "SNR L2 FM1, past 24 hours",
+      "SNR L2 FM2, past 24 hours",
+      "SNR L2 FM3, past 24 hours",
+      "SNR L2 FM5, past 24 hours",
+      "SNR L2 FM6, past 24 hours"
+    ],
+    "header": "SNR by FM in units of V/V",
+    "images": [
+      "neutral_atm_snrAveL2_leo-stage-ml1_coseqrt_2021-02-16_to_2021-02-16_all.png",
+      "neutral_atm_snrAveL2_leo-stage-ml1_coseqrt_2021-02-16_to_2021-02-16_fm01.png",
+      "neutral_atm_snrAveL2_leo-stage-ml1_coseqrt_2021-02-16_to_2021-02-16_fm02.png",
+      "neutral_atm_snrAveL2_leo-stage-ml1_coseqrt_2021-02-16_to_2021-02-16_fm03.png",
+      "neutral_atm_snrAveL2_leo-stage-ml1_coseqrt_2021-02-16_to_2021-02-16_fm05.png",
+      "neutral_atm_snrAveL2_leo-stage-ml1_coseqrt_2021-02-16_to_2021-02-16_fm06.png",
+    ],
+    "numCol": 6,
+    "title": "COSMIC-2 SNR L2 | Past 24 Hours"
+  }
+};
+
+
+If you want to add a new group, use the template below! Also, make sure to check commas.
+
+add this to the galleryConfig1 variable in whatever order you would like them displayed.
+
+the group variable ("group1") can be called whatever.
+
+"group1": {
+    "captions": [
+      "Maggie test All, past 24 hours",
+      "SNR L1 FM1, past 24 hours",
+      "SNR L1 FM2, past 24 hours",
+      "SNR L1 FM3, past 24 hours",
+      "SNR L1 FM5, past 24 hours",
+      "SNR L1 FM6, past 24 hours"
+    ],
+  "header": "SNR by FM in units of V/V",
+    "images": [
+      "neutral_atm_snrAveL1_leo-stage-ml1_coseqrt_2021-02-16_to_2021-02-16_all.png",
+      "neutral_atm_snrAveL1_leo-stage-ml1_coseqrt_2021-02-16_to_2021-02-16_fm01.png",
+      "neutral_atm_snrAveL1_leo-stage-ml1_coseqrt_2021-02-16_to_2021-02-16_fm02.png",
+      "neutral_atm_snrAveL1_leo-stage-ml1_coseqrt_2021-02-16_to_2021-02-16_fm03.png",
+      "neutral_atm_snrAveL1_leo-stage-ml1_coseqrt_2021-02-16_to_2021-02-16_fm05.png",
+      "subdir/neutral_atm_snrAveL1_leo-stage-ml1_coseqrt_2021-02-16_to_2021-02-16_fm06.png"
+    ],
+    "numCol": 6,
+    "title": "COSMIC-2 SNR L1 | Past 24 Hours"
+  }
+
+Update the title, header, captions (include a comma), and images (name of image, path to image if
+in a subdirectory under this director). make sure image name matches the name of the images you created! 
+
+Lightgallery will automatically build the display based on this galleryConfig1 variable. 
+
+You can edit currenty:
+  - Title: Display will put Title and Header together for group display
+  - Header: will display after Title in Group Header display
+  - Captions: Text before comma displayed first, sub caption after comma (time frame in this example).
+  - Images: path(only in a subdir) and name of images you want displayed, in the order you want them displayed.
+
+  - If you want a subdir, include the subdir at the beginning of the images entry, without a /.
+  - numCol isn't currently functional.
+
+make sure to click Chrome settings and clear browsing data to refresh reload of the JS config on the web display! 
+Then, reload the page, and you should see the updated layout. 
+
+also make sure to update your pathID variable to the directory path under /data that matches the path to config1.js and images. 
+
+Have fun! 
+*End*
+
